@@ -32,10 +32,10 @@
 		</complexContent>
 	</complexType>
 
-	<element name="abstractElementAnyType" substitutionGroup="profile:abstractElement">
+	<element name="elementInstanceAnyType" substitutionGroup="profile:elementInstance">
 		<complexType>
 			<complexContent>
-				<extension base="profile:abstractElementType">
+				<extension base="profile:elementInstanceType">
 					<group ref="profile:anyTypeElementGroup" />
 					<assert
 						test="if(((profile:restrictions/profile:use[not(text()='optional')]) or (count(profile:restrictions/profile:use)=0)) and not(profile:restrictions/profile:fixContent)) then ((profile:input/*[@hide=false()])or not(profile:input)) else(true())" />

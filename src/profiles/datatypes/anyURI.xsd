@@ -35,10 +35,10 @@
 	<complexType name="union_anyURI">
 		<group ref="profile:anyURIRestrictionGroup" minOccurs="0" /><!-- !!!ref -->
 	</complexType>
-	<element name="abstractElementAnyURI" substitutionGroup="profile:abstractElement">
+	<element name="elementInstanceAnyURI" substitutionGroup="profile:elementInstance">
 		<complexType>
 			<complexContent>
-				<extension base="profile:abstractElementType">
+				<extension base="profile:elementInstanceType">
 					<group ref="profile:anyURIElementGroup" />
 					<assert
 						test="if(((profile:restrictions/profile:use[not(text()='optional')]) or (count(profile:restrictions/profile:use)=0)) and not(profile:restrictions/profile:fixContent)) then ((profile:input/*[@hide=false()])or not(profile:input)) else(true())" />

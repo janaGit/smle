@@ -6,7 +6,7 @@
 		<attribute name="ref" type="NMTOKEN" use="required" />
 	</complexType>
 
-	<complexType name="elementType">
+	<complexType name="elementInstanceType">
 		<sequence>
 			<element name="label" type="string" minOccurs="0" />
 			<element name="description" type="string" minOccurs="0" />
@@ -16,7 +16,7 @@
 		<attribute name="XSDList" type="boolean" default="false" />
 	</complexType>
 
-	<complexType name="abstractElementType">
+	<complexType name="elementType">
 		<sequence>
 			<element name="label" type="string" minOccurs="0" />
 			<element name="description" type="string" minOccurs="0" />
@@ -27,14 +27,14 @@
 
 	<element name="element" type="profile:elementType" abstract="true" />
 	<element name="elementRef" type="profile:elementRefType" abstract="true" />
-	<element name="abstractElement" type="profile:abstractElementType" abstract="true" />
+	<element name="elementInstance" type="profile:elementInstanceType" abstract="true" />
 
 
 	<!-- //////////////////////////////////////////// -->
-	<element name="abstractComplexElement" substitutionGroup="profile:abstractElement">
+	<element name="complexElement" substitutionGroup="profile:element">
 		<complexType>
 			<complexContent>
-				<extension base="profile:abstractElementType">
+				<extension base="profile:elementType">
 					<sequence>
 						<element ref="profile:occurrence" />
 					</sequence>

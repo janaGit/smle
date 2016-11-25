@@ -30,6 +30,23 @@
 			<sequence>
 				<choice maxOccurs="unbounded">
 					<element ref="profile:element" />
+					<element name="choice">
+						<complexType>
+							<sequence>
+								<element name="label" type="string" minOccurs="0" />
+								<element name="description" type="string" minOccurs="0" />
+								<element ref="profile:element" minOccurs="0" maxOccurs="unbounded" />
+							</sequence>
+						</complexType>
+					</element>
+				</choice>
+				<element name="formConfiguration" type="profile:editor_config_formType">
+					<annotation>
+						<documentation>Description of the structure of the form.</documentation>
+					</annotation>
+				</element>
+				<choice maxOccurs="unbounded">
+					<element ref="profile:elementInstance" />
 					<element ref="profile:elementGroup">
 						<annotation>
 							<documentation>Description of the XML element groups.</documentation>
@@ -41,24 +58,6 @@
 						<documentation>Definition of dependencies between the XML element groups.</documentation>
 					</annotation>
 				</element>
-				<element name="formConfiguration" type="profile:editor_config_formType">
-					<annotation>
-						<documentation>Description of the structure of the form.</documentation>
-					</annotation>
-				</element>
-				<choice>
-					<element ref="profile:abstractElement" minOccurs="0" maxOccurs="unbounded" />
-					<element name="choice">
-						<complexType>
-							<sequence>
-								<element name="label" type="string" minOccurs="0" />
-								<element name="description" type="string" minOccurs="0" />
-								<element ref="profile:abstractElement" minOccurs="0" maxOccurs="unbounded" />
-							</sequence>
-						</complexType>
-					</element>
-				</choice>
-
 			</sequence>
 			<attribute name="class" type="string" />
 			<assert
@@ -284,7 +283,7 @@
 					<assert test="count(*)=count(*[ends-with(@ref,concat('_',./../@groupRef))])" />
 				</complexType>
 			</element>
-			<element ref="profile:abstractElement" />
+			<element ref="profile:elementInstance" />
 			<group ref="profile:logical_operation_elementGroup" />
 		</choice>
 	</complexType>
@@ -333,7 +332,7 @@
 			<element name="elements" minOccurs="0">
 				<complexType>
 					<choice maxOccurs="unbounded">
-						<element ref="profile:element" />
+						<element ref="profile:elementInstance" />
 						<element name="elementGroupRef">
 							<complexType>
 								<attribute name="groupRef" type="string" use="required" />

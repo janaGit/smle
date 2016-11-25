@@ -303,7 +303,7 @@ export class DynamicGUIService {
             }
             this.createModel();
             this.configure();
-            this.setAbstractConfigurations();
+            this.setConfigurations();
             this._logger.info('JSON profile:' + JSON.stringify(json));
             this._logger.info('model with the fix values:' + (this._model.documentElement.innerHTML));
             this._logger.info('element configuration:' + (JSON.stringify(this._elementConfig)));
@@ -343,27 +343,27 @@ export class DynamicGUIService {
             this.processFormComponent(formComponents);
         }
     }
-    private setAbstractConfigurations() {
+    private setConfigurations() {
         for (let key in this._profile) {
-            if (key.indexOf('abstract') == 0) {
+            if (key.indexOf('element') == 0 &&key.indexOf('elementInstance') != 0) {
                 let abstractElements = this._profile[key];
                 if (Array.isArray(abstractElements)) {
                     for (var _key in abstractElements) {
-                        this.setAbstractConfiguration(abstractElements[_key]);
+                        this.setConfiguration(abstractElements[_key]);
                     }
                 } else {
-                    this.setAbstractConfiguration(abstractElements);
+                    this.setConfiguration(abstractElements);
 
                 }
 
             }
         }
     }
-    private setAbstractConfiguration(abstractElement: any) {
+    private setConfiguration(abstractElement: any) {
         let XPath: XPathElement[] = this.splitXPath(abstractElement._XPath);
         let configuration = new Configuration();
 
-        this.setConfiguration(abstractElement, configuration);
+        this.setConfigurationValues(abstractElement, configuration);
         let config = this._globalConfig["description"] ;
         while (XPath.length > 0) {
             let xpathElement = XPath.shift();
@@ -386,21 +386,21 @@ export class DynamicGUIService {
                 this.processElementGroupRefs(cache, formComponent[key], "");
             } else if (key == 'formComponent') {
                 this.processFormComponents(formComponent[key]);
-            } else if (key == 'element') {
-                this.processElementRefs(cache, formComponent[key]);
+            } else if (key == 'elementInstance') {
+                this.processElementInstanceRefs(cache, formComponent[key]);
             }
         }
     }
-    private processElementRefs(cache: Cache, elements: any) {
+    private processElementInstanceRefs(cache: Cache, elements: any) {
         if (Array.isArray(elements)) {
             for (var key in elements) {
-                this.processElementRef(cache, elements[key]);
+                this.processElementInstanceRef(cache, elements[key]);
             }
         } else {
-            this.processElementRef(cache, elements);
+            this.processElementInstanceRef(cache, elements);
         }
     }
-    private processElementRef(cache: Cache, element: any) {
+    private processElementInstanceRef(cache: Cache, element: any) {
         let ref = element._ref;
         this._logger.info('Process single global element: ' + ref);
         for (let key in this._profile) {
@@ -473,12 +473,12 @@ export class DynamicGUIService {
 
         let xpath: XPathElement[] = this.splitXPath(XPath);
         let configuration = new Configuration();
-        configuration = this.setConfiguration(elementGroup, configuration);
+        configuration = this.setConfigurationValues(elementGroup, configuration);
         this._elementConfig[elementGroup._groupID] = configuration;
         cache.profileID = elementGroup._groupID;
         let _cache = this._insertElements.add(cache, xpath, configuration);
         for (var key in elements) {
-            if (key.indexOf('element') == 0 && key != 'elementGroup' && key != 'elementGroupRef') {
+            if (key.indexOf('elementInstance') == 0) {
                 this.insertSingleElements(_cache, elements[key]);
             } else if (key == "elementGroupRef") {
                 this.processElementGroupRefs(_cache, elements[key], XPath);
@@ -501,7 +501,7 @@ export class DynamicGUIService {
         let configuration = new Configuration();
         configuration.valueFix = null;
         configuration.valueDefault = null;
-        configuration = this.setConfiguration(element, configuration);
+        configuration = this.setConfigurationValues(element, configuration);
         this._elementConfig[element._ID] = configuration;
         let xpath = element._XPath;
         cache.profileID = element._ID;
@@ -509,7 +509,7 @@ export class DynamicGUIService {
         this._insertElements.add(cache, xpathElement, configuration);
     }
 
-    private setConfiguration(element: any, configuration: Configuration): Configuration {
+    private setConfigurationValues(element: any, configuration: Configuration): Configuration {
 
         if (element.restrictions) {
             if (element.restrictions["fixContent"]) {

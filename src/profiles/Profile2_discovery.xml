@@ -2,6 +2,89 @@
 <p:profile xmlns:p="http://xmlProfile.de" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlProfile.de Profile2.xsd" class="sml:PhysicalSystem">
 
+	<p:elementString XPath="gml:description">
+		<p:restrictions>
+			<p:use>required</p:use>
+		</p:restrictions>
+		<p:input>
+			<p:textField />
+		</p:input>
+	</p:elementString>
+
+	<p:elementString XPath="sml:keywords/sml:KeywordList/sml:keyword">
+		<p:restrictions>
+			<p:use>optional</p:use>
+		</p:restrictions>
+		<p:input>
+			<p:textField />
+		</p:input>
+	</p:elementString>
+
+	<p:elementString XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term/sml:label">
+		<p:restrictions>
+			<p:use>required</p:use>
+		</p:restrictions>
+		<p:input>
+			<p:textField />
+		</p:input>
+	</p:elementString>
+
+	<p:elementString XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term/sml:value">
+		<p:restrictions>
+			<p:use>required</p:use>
+		</p:restrictions>
+		<p:input>
+			<p:textField />
+		</p:input>
+	</p:elementString>
+
+	<p:elementString
+		XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term/@definition">
+		<p:restrictions>
+			<p:use>required</p:use>
+		</p:restrictions>
+		<p:input>
+			<p:textField />
+		</p:input>
+	</p:elementString>
+
+	<p:elementString
+		XPath="sml:contacts/sml:ContactList/sml:contact/gmd:CI_ResponsibleParty/gmd:organisationName">
+		<p:restrictions>
+			<p:use>required</p:use>
+		</p:restrictions>
+		<p:input>
+			<p:textField />
+		</p:input>
+	</p:elementString>
+
+	<p:elementString
+		XPath="sml:position/swe:DataRecord/swe:field/swe:Vector/swe:coordinate/swe:Quantity/swe:uom/@code">
+		<p:restrictions>
+			<p:use>required</p:use>
+		</p:restrictions>
+		<p:input>
+			<p:textField />
+		</p:input>
+	</p:elementString>
+	<p:elementDouble
+		XPath="sml:position/swe:DataRecord/swe:field/swe:Vector/swe:coordinate/swe:Quantity/swe:value">
+		<p:restrictions>
+			<p:use>required</p:use>
+		</p:restrictions>
+		<p:input>
+			<p:numberField />
+		</p:input>
+	</p:elementDouble>
+
+	<p:formConfiguration>
+		<p:formComponent label="Form">
+			<p:elementGroup groupRef="Identification" />
+			<p:elementGroup groupRef="TimePeriod" />
+			<p:elementGroup groupRef="Position" />
+		</p:formComponent>
+	</p:formConfiguration>
+
 	<p:elementGroup groupID="Identification" XPath="sml:identification/sml:IdentifierList">
 		<p:elements>
 			<p:elementGroupRef groupRef="uniqueID"
@@ -22,7 +105,7 @@
 	<p:elementGroup groupID="shortName"
 		XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term">
 		<p:elements>
-			<p:elementString XPath="sml:label" ID="label_shortName">
+			<p:elementInstanceString XPath="sml:label" ID="label_shortName">
 				<p:restrictions>
 					<p:fixContent>
 						<p:value>Short name</p:value>
@@ -31,8 +114,8 @@
 				<p:input>
 					<p:textField hide="true" />
 				</p:input>
-			</p:elementString>
-			<p:elementAnyURI XPath="@definition" ID="definition_shortName">
+			</p:elementInstanceString>
+			<p:elementInstanceAnyURI XPath="@definition" ID="definition_shortName">
 				<p:restrictions>
 					<p:fixContent>
 						<p:value>http://www.nexosproject.eu/dictionary/definitions.html#shortName</p:value>
@@ -41,16 +124,16 @@
 				<p:input>
 					<p:textField hide="true" />
 				</p:input>
-			</p:elementAnyURI>
-			<p:elementString XPath="sml:value" ID="value_shortName">
+			</p:elementInstanceAnyURI>
+			<p:elementInstanceString XPath="sml:value" ID="value_shortName">
 				<p:label>Short name (sml:value)</p:label>
-			</p:elementString>
+			</p:elementInstanceString>
 		</p:elements>
 	</p:elementGroup>
 	<p:elementGroup groupID="longName"
 		XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term">
 		<p:elements>
-			<p:elementString XPath="sml:label" ID="label_longName">
+			<p:elementInstanceString XPath="sml:label" ID="label_longName">
 				<p:restrictions>
 					<p:fixContent>
 						<p:value>Long name</p:value>
@@ -59,8 +142,8 @@
 				<p:input>
 					<p:textField hide="true" />
 				</p:input>
-			</p:elementString>
-			<p:elementAnyURI XPath="@definition" ID="definition_longName">
+			</p:elementInstanceString>
+			<p:elementInstanceAnyURI XPath="@definition" ID="definition_longName">
 				<p:restrictions>
 					<p:fixContent>
 						<p:value>http://www.nexosproject.eu/dictionary/definitions.html#longName</p:value>
@@ -69,16 +152,16 @@
 				<p:input>
 					<p:textField hide="true" />
 				</p:input>
-			</p:elementAnyURI>
-			<p:elementString XPath="sml:value" ID="value_longName">
+			</p:elementInstanceAnyURI>
+			<p:elementInstanceString XPath="sml:value" ID="value_longName">
 				<p:label>Long name (sml:value)</p:label>
-			</p:elementString>
+			</p:elementInstanceString>
 		</p:elements>
 	</p:elementGroup>
 	<p:elementGroup groupID="uniqueID"
 		XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term">
 		<p:elements>
-			<p:elementString XPath="sml:label" ID="label_uniqueID">
+			<p:elementInstanceString XPath="sml:label" ID="label_uniqueID">
 				<p:restrictions>
 					<p:fixContent>
 						<p:value>UUID</p:value>
@@ -87,8 +170,8 @@
 				<p:input>
 					<p:textField hide="true" />
 				</p:input>
-			</p:elementString>
-			<p:elementAnyURI XPath="@definition" ID="definition_uniqueID">
+			</p:elementInstanceString>
+			<p:elementInstanceAnyURI XPath="@definition" ID="definition_uniqueID">
 				<p:restrictions>
 					<p:fixContent>
 						<p:value>http://www.nexosproject.eu/dictionary/definitions.html#UUID</p:value>
@@ -97,16 +180,16 @@
 				<p:input>
 					<p:textField hide="true" />
 				</p:input>
-			</p:elementAnyURI>
-			<p:elementString XPath="sml:value" ID="value_uniqueID">
+			</p:elementInstanceAnyURI>
+			<p:elementInstanceString XPath="sml:value" ID="value_uniqueID">
 				<p:label>Unique ID (sml:value)</p:label>
-			</p:elementString>
+			</p:elementInstanceString>
 		</p:elements>
 	</p:elementGroup>
 	<p:elementGroup groupID="deviceID"
 		XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term">
 		<p:elements>
-			<p:elementString XPath="sml:label" ID="label_deviceID">
+			<p:elementInstanceString XPath="sml:label" ID="label_deviceID">
 				<p:restrictions>
 					<p:fixContent>
 						<p:value>Device ID</p:value>
@@ -115,8 +198,8 @@
 				<p:input>
 					<p:textField hide="true" />
 				</p:input>
-			</p:elementString>
-			<p:elementAnyURI XPath="@definition" ID="definition_deviceID">
+			</p:elementInstanceString>
+			<p:elementInstanceAnyURI XPath="@definition" ID="definition_deviceID">
 				<p:restrictions>
 					<p:fixContent>
 						<p:value>http://www.nexosproject.eu/dictionary/definitions.html#deviceID</p:value>
@@ -125,16 +208,16 @@
 				<p:input>
 					<p:textField hide="true" />
 				</p:input>
-			</p:elementAnyURI>
-			<p:elementString XPath="sml:value" ID="value_deviceID">
+			</p:elementInstanceAnyURI>
+			<p:elementInstanceString XPath="sml:value" ID="value_deviceID">
 				<p:label>Device ID (sml:value)</p:label>
-			</p:elementString>
+			</p:elementInstanceString>
 		</p:elements>
 	</p:elementGroup>
 	<p:elementGroup groupID="serialNumber"
 		XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term">
 		<p:elements>
-			<p:elementString XPath="sml:label" ID="label_serialNumber">
+			<p:elementInstanceString XPath="sml:label" ID="label_serialNumber">
 				<p:restrictions>
 					<p:fixContent>
 						<p:value>Serial number</p:value>
@@ -143,8 +226,8 @@
 				<p:input>
 					<p:textField hide="true" />
 				</p:input>
-			</p:elementString>
-			<p:elementAnyURI XPath="@definition" ID="definition_serialNumber">
+			</p:elementInstanceString>
+			<p:elementInstanceAnyURI XPath="@definition" ID="definition_serialNumber">
 				<p:restrictions>
 					<p:fixContent>
 						<p:value>http://www.nexosproject.eu/dictionary/definitions.html#serialNumber</p:value>
@@ -153,16 +236,16 @@
 				<p:input>
 					<p:textField hide="true" />
 				</p:input>
-			</p:elementAnyURI>
-			<p:elementString XPath="sml:value" ID="value_serialNumber">
+			</p:elementInstanceAnyURI>
+			<p:elementInstanceString XPath="sml:value" ID="value_serialNumber">
 				<p:label>Serial number (sml:value)</p:label>
-			</p:elementString>
+			</p:elementInstanceString>
 		</p:elements>
 	</p:elementGroup>
 	<p:elementGroup groupID="WMO"
 		XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term">
 		<p:elements>
-			<p:elementString XPath="sml:label" ID="label_WMO">
+			<p:elementInstanceString XPath="sml:label" ID="label_WMO">
 				<p:restrictions>
 					<p:fixContent>
 						<p:value>WMO</p:value>
@@ -171,8 +254,8 @@
 				<p:input>
 					<p:textField hide="true" />
 				</p:input>
-			</p:elementString>
-			<p:elementAnyURI XPath="@definition" ID="definition_WMO">
+			</p:elementInstanceString>
+			<p:elementInstanceAnyURI XPath="@definition" ID="definition_WMO">
 				<p:restrictions>
 					<p:fixContent>
 						<p:value>http://www.nexosproject.eu/dictionary/definitions.html#WMO_ID</p:value>
@@ -181,22 +264,22 @@
 				<p:input>
 					<p:textField hide="true" />
 				</p:input>
-			</p:elementAnyURI>
-			<p:elementString XPath="sml:value" ID="value_WMO">
+			</p:elementInstanceAnyURI>
+			<p:elementInstanceString XPath="sml:value" ID="value_WMO">
 				<p:label>WMO (sml:value)</p:label>
-			</p:elementString>
+			</p:elementInstanceString>
 		</p:elements>
 	</p:elementGroup>
 
 	<p:elementGroup groupID="TimePeriod" XPath="sml:validTime/gml:TimePeriod">
 		<p:elements>
-			<p:elementString ID="ID_TimePeriod" XPath="gml:id">
+			<p:elementInstanceString ID="ID_TimePeriod" XPath="gml:id">
 				<p:restrictions>
 					<p:fixContent>
 						<p:value>validityPeriod</p:value>
 					</p:fixContent>
 				</p:restrictions>
-			</p:elementString>
+			</p:elementInstanceString>
 		</p:elements>
 	</p:elementGroup>
 
@@ -205,48 +288,48 @@
 		<p:elements>
 			<p:elementGroup groupID="location_field" XPath="swe:field">
 				<p:elements>
-					<p:elementNCName ID="name_location_field" XPath="@name">
+					<p:elementInstanceNCName ID="name_location_field" XPath="@name">
 						<p:restrictions>
 							<p:fixContent>
 								<p:value>location</p:value>
 							</p:fixContent>
 						</p:restrictions>
-					</p:elementNCName>
+					</p:elementInstanceNCName>
 					<p:elementGroup groupID="vector_location_field" XPath="swe:Vector">
 						<p:elements>
 							<p:elementGroup groupID="latitude_coordinate" XPath="swe:coordinate">
 								<p:elements>
-									<p:elementNCName ID="name_latitude_coordinate" XPath="@name">
+									<p:elementInstanceNCName ID="name_latitude_coordinate" XPath="@name">
 										<p:restrictions>
 											<p:fixContent>
 												<p:value>Lat</p:value>
 											</p:fixContent>
 										</p:restrictions>
-									</p:elementNCName>
+									</p:elementInstanceNCName>
 									<p:elementGroupRef groupRef="latitude_Quantity" XPath="swe:coordinate/swe:Quantity" />
 								</p:elements>
 							</p:elementGroup>
 							<p:elementGroup groupID="longitude_coordinate" XPath="swe:coordinate">
 								<p:elements>
-									<p:elementNCName ID="name_longitude_coordinate" XPath="@name">
+									<p:elementInstanceNCName ID="name_longitude_coordinate" XPath="@name">
 										<p:restrictions>
 											<p:fixContent>
 												<p:value>Lon</p:value>
 											</p:fixContent>
 										</p:restrictions>
-									</p:elementNCName>
+									</p:elementInstanceNCName>
 									<p:elementGroupRef groupRef="longitude_Quantity" XPath="swe:coordinate/swe:Quantity" />
 								</p:elements>
 							</p:elementGroup>
 							<p:elementGroup groupID="altitude_coordinate" XPath="swe:coordinate">
 								<p:elements>
-									<p:elementNCName ID="name_altitude_coordinate" XPath="@name">
+									<p:elementInstanceNCName ID="name_altitude_coordinate" XPath="@name">
 										<p:restrictions>
 											<p:fixContent>
 												<p:value>Alt</p:value>
 											</p:fixContent>
 										</p:restrictions>
-									</p:elementNCName>
+									</p:elementInstanceNCName>
 									<p:elementGroupRef groupRef="altitude_Quantity" XPath="swe:coordinate/swe:Quantity" />
 								</p:elements>
 							</p:elementGroup>
@@ -257,13 +340,13 @@
 			</p:elementGroup>
 			<!-- <p:elementGroup groupID="orientation_field" XPath="swe:field"> -->
 			<!-- <p:elements> -->
-			<!-- <p:elementNCName ID="name_orientation_field" XPath="@name"> -->
+			<!-- <p:elementInstanceNCName ID="name_orientation_field" XPath="@name"> -->
 			<!-- <p:restrictions> -->
 			<!-- <p:fixContent> -->
 			<!-- <p:value>orientation</p:value> -->
 			<!-- </p:fixContent> -->
 			<!-- </p:restrictions> -->
-			<!-- </p:elementNCName> -->
+			<!-- </p:elementInstanceNCName> -->
 			<!-- </p:elements> -->
 			<!-- </p:elementGroup> -->
 		</p:elements>
@@ -271,193 +354,109 @@
 
 	<p:elementGroup groupID="longitude_Quantity" XPath="swe:coordinate/swe:Quantity">
 		<p:elements>
-			<p:elementAnyURI ID="referenceFrame_longitude_Quantity" XPath="@referenceFrame">
+			<p:elementInstanceAnyURI ID="referenceFrame_longitude_Quantity" XPath="@referenceFrame">
 				<p:restrictions>
 					<p:fixContent>
 						<p:value>urn:ogc:crs:EPSG:4326</p:value>
 					</p:fixContent>
 				</p:restrictions>
-			</p:elementAnyURI>
-			<p:elementString ID="axisID_longitude_Quantity" XPath="@axisID">
+			</p:elementInstanceAnyURI>
+			<p:elementInstanceString ID="axisID_longitude_Quantity" XPath="@axisID">
 				<p:restrictions>
 					<p:fixContent>
 						<p:value>Lon</p:value>
 					</p:fixContent>
 				</p:restrictions>
-			</p:elementString>
-			<p:elementString ID="code_uom_longitude_Quantity" XPath="swe:uom/@code">
+			</p:elementInstanceString>
+			<p:elementInstanceString ID="code_uom_longitude_Quantity" XPath="swe:uom/@code">
 				<p:restrictions>
 					<p:defaultContent>
 						<p:value>deg</p:value>
 					</p:defaultContent>
 				</p:restrictions>
-			</p:elementString>
-			<p:elementDouble ID="value_longitude_Quantity" XPath="swe:value">
+			</p:elementInstanceString>
+			<p:elementInstanceDouble ID="value_longitude_Quantity" XPath="swe:value">
 				<p:restrictions>
 					<p:defaultContent>
 						<p:value>0</p:value>
 					</p:defaultContent>
 				</p:restrictions>
-			</p:elementDouble>
+			</p:elementInstanceDouble>
 		</p:elements>
 	</p:elementGroup>
 
 	<p:elementGroup groupID="latitude_Quantity" XPath="swe:coordinate/swe:Quantity">
 		<p:elements>
-			<p:elementAnyURI ID="referenceFrame_latitude_Quantity" XPath="@referenceFrame">
+			<p:elementInstanceAnyURI ID="referenceFrame_latitude_Quantity" XPath="@referenceFrame">
 				<p:restrictions>
 					<p:fixContent>
 						<p:value>urn:ogc:crs:EPSG:4326</p:value>
 					</p:fixContent>
 				</p:restrictions>
-			</p:elementAnyURI>
-			<p:elementString ID="axisID_latitude_Quantity" XPath="@axisID">
+			</p:elementInstanceAnyURI>
+			<p:elementInstanceString ID="axisID_latitude_Quantity" XPath="@axisID">
 				<p:restrictions>
 					<p:fixContent>
 						<p:value>Lat</p:value>
 					</p:fixContent>
 				</p:restrictions>
-			</p:elementString>
+			</p:elementInstanceString>
 			<p:elementGroup groupID="uom_latitude_Quantity" XPath="swe:uom">
 				<p:elements>
-					<p:elementString ID="code_uom_latitude_Quantity" XPath="@code">
+					<p:elementInstanceString ID="code_uom_latitude_Quantity" XPath="@code">
 						<p:restrictions>
 							<p:defaultContent>
 								<p:value>deg</p:value>
 							</p:defaultContent>
 						</p:restrictions>
-					</p:elementString>
+					</p:elementInstanceString>
 				</p:elements>
 			</p:elementGroup>
-			<p:elementDouble ID="value_latitude_Quantity" XPath="swe:value">
+			<p:elementInstanceDouble ID="value_latitude_Quantity" XPath="swe:value">
 				<p:restrictions>
 					<p:defaultContent>
 						<p:value>0</p:value>
 					</p:defaultContent>
 				</p:restrictions>
-			</p:elementDouble>
+			</p:elementInstanceDouble>
 		</p:elements>
 	</p:elementGroup>
 
 	<p:elementGroup groupID="altitude_Quantity" XPath="swe:coordinate/swe:Quantity">
 		<p:elements>
-			<p:elementAnyURI ID="referenceFrame_altitude_Quantity" XPath="@referenceFrame">
+			<p:elementInstanceAnyURI ID="referenceFrame_altitude_Quantity" XPath="@referenceFrame">
 				<p:restrictions>
 					<p:fixContent>
 						<p:value>urn:ogc:crs:EPSG:5715</p:value>
 					</p:fixContent>
 				</p:restrictions>
-			</p:elementAnyURI>
-			<p:elementString ID="axisID_altitude_Quantity" XPath="@axisID">
+			</p:elementInstanceAnyURI>
+			<p:elementInstanceString ID="axisID_altitude_Quantity" XPath="@axisID">
 				<p:restrictions>
 					<p:fixContent>
 						<p:value>Alt</p:value>
 					</p:fixContent>
 				</p:restrictions>
-			</p:elementString>
+			</p:elementInstanceString>
 			<p:elementGroup groupID="uom_altitude_Position" XPath="swe:uom">
 				<p:elements>
-					<p:elementString ID="code_uom_altitude_Position" XPath="@code">
+					<p:elementInstanceString ID="code_uom_altitude_Position" XPath="@code">
 						<p:restrictions>
 							<p:defaultContent>
 								<p:value>m</p:value>
 							</p:defaultContent>
 						</p:restrictions>
-					</p:elementString>
+					</p:elementInstanceString>
 				</p:elements>
 			</p:elementGroup>
-			<p:elementDouble ID="value_altitude_Quantity" XPath="swe:value">
+			<p:elementInstanceDouble ID="value_altitude_Quantity" XPath="swe:value">
 				<p:restrictions>
 					<p:defaultContent>
 						<p:value>0</p:value>
 					</p:defaultContent>
 				</p:restrictions>
-			</p:elementDouble>
+			</p:elementInstanceDouble>
 		</p:elements>
 	</p:elementGroup>
-
-	<p:formConfiguration>
-		<p:formComponent label="Form">
-			<p:elementGroup groupRef="Identification" />
-			<p:elementGroup groupRef="TimePeriod" />
-			<p:elementGroup groupRef="Position" />
-		</p:formComponent>
-	</p:formConfiguration>
-
-
-	<p:abstractElementString XPath="gml:description">
-		<p:restrictions>
-			<p:use>required</p:use>
-		</p:restrictions>
-		<p:input>
-			<p:textField />
-		</p:input>
-	</p:abstractElementString>
-
-	<p:abstractElementString XPath="sml:keywords/sml:KeywordList/sml:keyword">
-		<p:restrictions>
-			<p:use>optional</p:use>
-		</p:restrictions>
-		<p:input>
-			<p:textField />
-		</p:input>
-	</p:abstractElementString>
-
-	<p:abstractElementString XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term/sml:label">
-		<p:restrictions>
-			<p:use>required</p:use>
-		</p:restrictions>
-		<p:input>
-			<p:textField />
-		</p:input>
-	</p:abstractElementString>
-
-	<p:abstractElementString XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term/sml:value">
-		<p:restrictions>
-			<p:use>required</p:use>
-		</p:restrictions>
-		<p:input>
-			<p:textField />
-		</p:input>
-	</p:abstractElementString>
-
-	<p:abstractElementString
-		XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term/@definition">
-		<p:restrictions>
-			<p:use>required</p:use>
-		</p:restrictions>
-		<p:input>
-			<p:textField />
-		</p:input>
-	</p:abstractElementString>
-
-	<p:abstractElementString
-		XPath="sml:contacts/sml:ContactList/sml:contact/gmd:CI_ResponsibleParty/gmd:organisationName">
-		<p:restrictions>
-			<p:use>required</p:use>
-		</p:restrictions>
-		<p:input>
-			<p:textField />
-		</p:input>
-	</p:abstractElementString>
-
-	<p:abstractElementString
-		XPath="sml:position/swe:DataRecord/swe:field/swe:Vector/swe:coordinate/swe:Quantity/swe:uom/@code">
-		<p:restrictions>
-			<p:use>required</p:use>
-		</p:restrictions>
-		<p:input>
-			<p:textField />
-		</p:input>
-	</p:abstractElementString>
-	<p:abstractElementDouble
-		XPath="sml:position/swe:DataRecord/swe:field/swe:Vector/swe:coordinate/swe:Quantity/swe:value">
-		<p:restrictions>
-			<p:use>required</p:use>
-		</p:restrictions>
-		<p:input>
-			<p:numberField />
-		</p:input>
-	</p:abstractElementDouble>
 
 </p:profile>
