@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:profile xmlns:p="http://xmlProfile.de" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://xmlProfile.de Profile2.xsd" class="sml:PhysicalSystem">
+	xsi:schemaLocation="http://xmlProfile.de Profile.xsd" class="sml:PhysicalSystem">
 
 	<p:elementString XPath="gml:description">
 		<p:restrictions>
@@ -38,8 +38,7 @@
 		</p:input>
 	</p:elementString>
 
-	<p:elementString
-		XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term/@definition">
+	<p:elementString XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term/@definition">
 		<p:restrictions>
 			<p:use>required</p:use>
 		</p:restrictions>
@@ -76,7 +75,6 @@
 			<p:numberField />
 		</p:input>
 	</p:elementDouble>
-
 	<p:formConfiguration>
 		<p:formComponent label="Form">
 			<p:complexElementInstance groupRef="Identification" />
@@ -84,7 +82,6 @@
 			<p:complexElementInstance groupRef="Position" />
 		</p:formComponent>
 	</p:formConfiguration>
-
 	<p:complexElementInstance groupID="Identification" XPath="sml:identification/sml:IdentifierList">
 		<p:elements>
 			<p:complexElementInstanceRef groupRef="uniqueID"
@@ -130,6 +127,7 @@
 			</p:elementInstanceString>
 		</p:elements>
 	</p:complexElementInstance>
+
 	<p:complexElementInstance groupID="longName"
 		XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term">
 		<p:elements>
@@ -306,7 +304,8 @@
 											</p:fixContent>
 										</p:restrictions>
 									</p:elementInstanceNCName>
-									<p:complexElementInstanceRef groupRef="latitude_Quantity" XPath="swe:coordinate/swe:Quantity" />
+									<p:complexElementInstanceRef groupRef="latitude_Quantity"
+										XPath="swe:coordinate/swe:Quantity" />
 								</p:elements>
 							</p:complexElementInstance>
 							<p:complexElementInstance groupID="longitude_coordinate" XPath="swe:coordinate">
@@ -318,7 +317,8 @@
 											</p:fixContent>
 										</p:restrictions>
 									</p:elementInstanceNCName>
-									<p:complexElementInstanceRef groupRef="longitude_Quantity" XPath="swe:coordinate/swe:Quantity" />
+									<p:complexElementInstanceRef groupRef="longitude_Quantity"
+										XPath="swe:coordinate/swe:Quantity" />
 								</p:elements>
 							</p:complexElementInstance>
 							<p:complexElementInstance groupID="altitude_coordinate" XPath="swe:coordinate">
@@ -330,7 +330,8 @@
 											</p:fixContent>
 										</p:restrictions>
 									</p:elementInstanceNCName>
-									<p:complexElementInstanceRef groupRef="altitude_Quantity" XPath="swe:coordinate/swe:Quantity" />
+									<p:complexElementInstanceRef groupRef="altitude_Quantity"
+										XPath="swe:coordinate/swe:Quantity" />
 								</p:elements>
 							</p:complexElementInstance>
 						</p:elements>

@@ -61,7 +61,7 @@
 			</sequence>
 			<attribute name="class" type="string" />
 			<assert
-				test="count(.//profile:arithmetic-operators/profile:item/profile:ref/@ref)=count(.//profile:arithmetic-operators/profile:item/profile:ref[(@ref=preceding::profile:element_double/@ID) or (@ref=following::profile:element_double/@ID)or (@ref=preceding::profile:element_integer/@ID) or (@ref=following::profile:element_integer/@ID)or(@ref=preceding::profile:element_decimal/@ID) or (@ref=following::profile:element_decimal/@ID)or (@ref=preceding::profile:element_nonPositiveInteger/@ID) or (@ref=following::profile:element_nonPositiveInteger/@ID)or (@ref=preceding::profile:element_positiveInteger/@ID) or (@ref=following::profile:element_positiveInteger/@ID)])" />
+				test="count(.//profile:arithmeticOperator/profile:item/profile:ref/@ref)=count(.//profile:arithmeticOperator/profile:item/profile:ref[(@ref=preceding::profile:element_double/@ID) or (@ref=following::profile:element_double/@ID)or (@ref=preceding::profile:element_integer/@ID) or (@ref=following::profile:element_integer/@ID)or(@ref=preceding::profile:element_decimal/@ID) or (@ref=following::profile:element_decimal/@ID)or (@ref=preceding::profile:element_nonPositiveInteger/@ID) or (@ref=following::profile:element_nonPositiveInteger/@ID)or (@ref=preceding::profile:element_positiveInteger/@ID) or (@ref=following::profile:element_positiveInteger/@ID)])" />
 			<assert
 				test="count(.//profile:rounding/profile:item/profile:ref/@ref)=count(.//profile:rounding/profile:item/profile:ref[(@ref=preceding::profile:element_double/@ID) or (@ref=following::profile:element_double/@ID)or (@ref=preceding::profile:element_integer/@ID) or (@ref=following::profile:element_integer/@ID)or(@ref=preceding::profile:element_decimal/@ID) or (@ref=following::profile:element_decimal/@ID)or (@ref=preceding::profile:element_nonPositiveInteger/@ID) or (@ref=following::profile:element_nonPositiveInteger/@ID)or (@ref=preceding::profile:element_positiveInteger/@ID) or (@ref=following::profile:element_positiveInteger/@ID)])" />
 			<assert
@@ -139,10 +139,12 @@
 				test="if(.//profile:element_union/@ref) then(count(.//profile:element_union/@ref)=count(.//profile:element_union[@ref=preceding::profile:element_union/@ID])) else(true())" />
 			<assert
 				test="if(.//profile:map) then (count(.//profile:map/@coordinate='longitude')=1 and count(.//profile:map/@coordinate='latitude')=1) else(true())" />
-			<!-- test="not(profile:complexElementInstance_choice[profile:complexElementInstance/@group-name != profile:complexElementInstance/@group-name])" 
-				/> -->
+
+			<!-- test="not(profile:complexElementInstance_choice[profile:complexElementInstance/@group-name != 
+				profile:complexElementInstance/@group-name])" /> -->
 			<!-- test="count(profile:complexElementInstance_choice)=count(profile:complexElementInstance_choice[not(profile:complexElementInstance/@group-name 
-				= ./following-sibling::profile:complexElementInstance_choice/profile:complexElementInstance/@group-name)])" /> -->
+				= ./following-sibling::profile:complexElementInstance_choice/profile:complexElementInstance/@group-name)])" 
+				/> -->
 			<assert
 				test="not(.//profile:element[./../../profile:occurrence/profile:occur!=1 or ./../../profile:occurrence/profile:maxOccurs&gt;1 or ./../../profile:occurrence/profile:minOccurs&gt;1]/@ID = .//*[not(profile:content-selection)]/profile:fixContent/profile:ref)" />
 		</complexType>
@@ -182,7 +184,8 @@
 		<keyref name="complexElementInstance_name_ref" refer="profile:complexElementInstance_ID">
 			<annotation>
 				<documentation>Every complexElementInstance reference has to refer to a
-					complexElementInstance name.
+					complexElementInstance
+					name.
 				</documentation>
 			</annotation>
 			<selector xpath=".//*" />
@@ -191,7 +194,8 @@
 		<keyref name="complexElementInstance_name_XPath_ref" refer="profile:complexElementInstance_ID_XPath">
 			<annotation>
 				<documentation>Every complexElementInstance reference has to refer to a
-					complexElementInstance name.
+					complexElementInstance
+					name.
 				</documentation>
 			</annotation>
 			<selector xpath=".//*" />
@@ -208,8 +212,7 @@
 			<field xpath="profile:formComponent/@name" />
 		</key>
 		<key name="key_unique_names">
-			<selector
-				xpath=".//profile:dependenceRules/profile:keys/profile:key|profile:dependenceRules/profile:keys/profile:unique" />
+			<selector xpath=".//profile:keys/profile:key|.//profile:keys/profile:unique" />
 			<field xpath="@name"></field>
 		</key>
 		<key name="keyRef_names">
@@ -247,7 +250,7 @@
 						<attribute name="groupRef" type="string" use="required" />
 					</complexType>
 				</element>
-				<element name="element">
+				<element name="elementInstance">
 					<complexType>
 						<attribute name="ref" type="string" use="required" />
 					</complexType>
@@ -283,7 +286,8 @@
 					<assert test="count(*)=count(*[ends-with(@ref,concat('_',./../@groupRef))])" />
 				</complexType>
 			</element>
-			<element ref="profile:elementInstance" />
+			<element ref="profile:element" />
+			<group ref="profile:elementInstanceRefGroup" />
 			<group ref="profile:logical_operation_complexElementInstance" />
 		</choice>
 	</complexType>
@@ -397,32 +401,37 @@
 	</complexType>
 	<group name="logical_operationGroup">
 		<choice>
-			<element name="elementAnyType" type="profile:elementAnyTypeRefType" />
-			<element name="elementAnyURI" type="profile:elementAnyURIRefType" />
-			<element name="elementBoolean" type="profile:elementBooleanRefType" />
-			<element name="elementDate" type="profile:elementDateRefType" />
-			<element name="elementDateTime" type="profile:elementDateTimeRefType" />
-			<element name="elementDecimal" type="profile:elementDecimalRefType" />
-			<element name="elementdouble" type="profile:elementDoubleRefType" />
-			<element name="elementduration" type="profile:elementDurationRefType" />
-			<element name="elementID" type="profile:elementIDRefType" />
-			<element name="elementInteger" type="profile:elementIntegerRefType" />
-			<element name="elementName" type="profile:elementNameRefType" />
-			<element name="elementNCName" type="profile:elementNCNameRefType" />
-			<element name="elementNonPositiveInteger" type="profile:elementNonPositiveIntegerRefType" />
-			<element name="elementPositiveInteger" type="profile:elementPositiveIntegerRefType" />
-			<element name="elementQName" type="profile:elementQNameRefType" />
-			<element name="elementString" type="profile:elementStringRefType" />
-			<element name="elementTime" type="profile:elementTimeRefType" />
-			<element name="elementUnion" type="profile:elementUnionRefType" />
+			<group ref="profile:elementInstanceRefGroup" />
 
 			<element name="group-occurrence" type="profile:occurrenceType" minOccurs="0" />
+
 			<group ref="profile:logical_operation" minOccurs="0" maxOccurs="unbounded" />
 		</choice>
 
 	</group>
 
-
+	<group name="elementInstanceRefGroup">
+		<choice>
+			<element name="elementInstanceAnyTypeRef" type="profile:elementAnyTypeRefType" />
+			<element name="elementInstanceAnyURIRef" type="profile:elementAnyURIRefType" />
+			<element name="elementInstanceBooleanRef" type="profile:elementBooleanRefType" />
+			<element name="elementInstanceDateRef" type="profile:elementDateRefType" />
+			<element name="elementInstanceDateTimeRef" type="profile:elementDateTimeRefType" />
+			<element name="elementInstanceDecimalRef" type="profile:elementDecimalRefType" />
+			<element name="elementInstanceDoubleRef" type="profile:elementDoubleRefType" />
+			<element name="elementInstanceDurationRef" type="profile:elementDurationRefType" />
+			<element name="elementInstanceIDRef" type="profile:elementIDRefType" />
+			<element name="elementInstanceIntegerRef" type="profile:elementIntegerRefType" />
+			<element name="elementInstanceNameRef" type="profile:elementNameRefType" />
+			<element name="elementInstanceNCNameRef" type="profile:elementNCNameRefType" />
+			<element name="elementInstanceNonPositiveIntegerRef" type="profile:elementNonPositiveIntegerRefType" />
+			<element name="elementInstancePositiveIntegerRef" type="profile:elementPositiveIntegerRefType" />
+			<element name="elementInstanceQNameRef" type="profile:elementQNameRefType" />
+			<element name="elementInstanceStringRef" type="profile:elementStringRefType" />
+			<element name="elementInstanceTimeRef" type="profile:elementTimeRefType" />
+			<element name="elementInstanceUnionRef" type="profile:elementUnionRefType" />
+		</choice>
+	</group>
 
 
 	<complexType name="implicationType">
@@ -444,7 +453,7 @@
 			</element>
 		</sequence>
 	</complexType>
-
+<!-- Keys and Unique elements / attributes -->
 	<group name="keys">
 		<choice>
 			<element name="key" type="profile:keyType" />

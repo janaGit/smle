@@ -382,7 +382,7 @@ export class DynamicGUIService {
     private processFormComponent(formComponent: any) {
         let cache = new Cache(this._model.documentElement);
         for (var key in formComponent) {
-            if (key == 'elementGroup') {
+            if (key == 'complexElementInstance') {
                 this.processElementGroupRefs(cache, formComponent[key], "");
             } else if (key == 'formComponent') {
                 this.processFormComponents(formComponent[key]);
@@ -404,7 +404,7 @@ export class DynamicGUIService {
         let ref = element._ref;
         this._logger.info('Process single global element: ' + ref);
         for (let key in this._profile) {
-            if (key.indexOf('element') == 0 && key != 'elementGroup' && key != 'elementGroupRef') {
+            if (key.indexOf('element') == 0 && key != 'complexElementInstance' && key != 'complexElementInstanceRef') {
                 let elementGlobal = this._profile[key];
                 if (Array.isArray(elementGlobal)) {
                     for (var _key in elementGlobal) {
@@ -422,46 +422,46 @@ export class DynamicGUIService {
             }
         }
     }
-    private processElementGroupRefs(cache: Cache, elementGroups: any, parentXPath: string) {
-        if (Array.isArray(elementGroups)) {
-            for (var key in elementGroups) {
-                this.processElementGroupRef(cache, elementGroups[key], parentXPath);
+    private processElementGroupRefs(cache: Cache, complexElementInstances: any, parentXPath: string) {
+        if (Array.isArray(complexElementInstances)) {
+            for (var key in complexElementInstances) {
+                this.processElementGroupRef(cache, complexElementInstances[key], parentXPath);
             }
         } else {
-            this.processElementGroupRef(cache, elementGroups, parentXPath);
+            this.processElementGroupRef(cache, complexElementInstances, parentXPath);
         }
     }
-    private processElementGroupRef(cache: Cache, elementGroup: any, parentXPath: string) {
-        let groupID = elementGroup._groupRef;
+    private processElementGroupRef(cache: Cache, complexElementInstance: any, parentXPath: string) {
+        let groupID = complexElementInstance._groupRef;
         for (let key in this._profile) {
-            if (key == "elementGroup") {
-                let elementGroupsGlobal = this._profile[key];
-                if (Array.isArray(elementGroupsGlobal)) {
-                    for (var _key in elementGroupsGlobal) {
-                        if (groupID == elementGroupsGlobal[_key]._groupID) {
-                            this.processElementGroup(cache, elementGroupsGlobal[_key], parentXPath, true);
+            if (key == "complexElementInstance") {
+                let complexElementInstancesGlobal = this._profile[key];
+                if (Array.isArray(complexElementInstancesGlobal)) {
+                    for (var _key in complexElementInstancesGlobal) {
+                        if (groupID == complexElementInstancesGlobal[_key]._groupID) {
+                            this.processElementGroup(cache, complexElementInstancesGlobal[_key], parentXPath, true);
                         }
                     }
                 } else {
-                    if (groupID == elementGroupsGlobal._groupID) {
-                        this.processElementGroup(cache, elementGroupsGlobal, parentXPath, true);
+                    if (groupID == complexElementInstancesGlobal._groupID) {
+                        this.processElementGroup(cache, complexElementInstancesGlobal, parentXPath, true);
                     }
                 }
             }
         }
     }
-    private processElementGroups(cache: Cache, elementGroups: any, parentXPath: string, global: boolean) {
-        if (Array.isArray(elementGroups)) {
-            for (var key in elementGroups) {
-                this.processElementGroup(cache, elementGroups[key], parentXPath, global);
+    private processElementGroups(cache: Cache, complexElementInstances: any, parentXPath: string, global: boolean) {
+        if (Array.isArray(complexElementInstances)) {
+            for (var key in complexElementInstances) {
+                this.processElementGroup(cache, complexElementInstances[key], parentXPath, global);
             }
         } else {
-            this.processElementGroup(cache, elementGroups, parentXPath, global);
+            this.processElementGroup(cache, complexElementInstances, parentXPath, global);
         }
     }
-    private processElementGroup(cache: Cache, elementGroup: any, parentXPath: string, global: boolean) {
-        let elements = elementGroup.elements;
-        let XPath: string = elementGroup._XPath;
+    private processElementGroup(cache: Cache, complexElementInstance: any, parentXPath: string, global: boolean) {
+        let elements = complexElementInstance.elements;
+        let XPath: string = complexElementInstance._XPath;
         if (global) {
             let sliceLength: number = parentXPath.length;
             if (XPath.substring(sliceLength, sliceLength + 1) == "/") {
@@ -473,16 +473,16 @@ export class DynamicGUIService {
 
         let xpath: XPathElement[] = this.splitXPath(XPath);
         let configuration = new Configuration();
-        configuration = this.setConfigurationValues(elementGroup, configuration);
-        this._elementConfig[elementGroup._groupID] = configuration;
-        cache.profileID = elementGroup._groupID;
+        configuration = this.setConfigurationValues(complexElementInstance, configuration);
+        this._elementConfig[complexElementInstance._groupID] = configuration;
+        cache.profileID = complexElementInstance._groupID;
         let _cache = this._insertElements.add(cache, xpath, configuration);
         for (var key in elements) {
             if (key.indexOf('elementInstance') == 0) {
                 this.insertSingleElements(_cache, elements[key]);
-            } else if (key == "elementGroupRef") {
+            } else if (key == "complexElementInstanceRef") {
                 this.processElementGroupRefs(_cache, elements[key], XPath);
-            } else if (key == "elementGroup") {
+            } else if (key == "complexElementInstance") {
                 this.processElementGroups(_cache, elements[key], XPath, false);
             }
         }
@@ -565,7 +565,7 @@ export class DynamicGUIService {
     }
 
     private getProfile(): Observable<JSON> {
-        return this.http.get('../../profiles/Profile2_discovery.xml').map((response: Response) => {
+        return this.http.get('../../profiles/Profile_discovery.xml').map((response: Response) => {
             var x2js = new X2JS();
             var json = x2js.xml2js(response.text());
             //   alert(JSON.stringify(json));
