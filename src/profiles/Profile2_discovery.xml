@@ -79,30 +79,30 @@
 
 	<p:formConfiguration>
 		<p:formComponent label="Form">
-			<p:elementGroup groupRef="Identification" />
-			<p:elementGroup groupRef="TimePeriod" />
-			<p:elementGroup groupRef="Position" />
+			<p:complexElementInstance groupRef="Identification" />
+			<p:complexElementInstance groupRef="TimePeriod" />
+			<p:complexElementInstance groupRef="Position" />
 		</p:formComponent>
 	</p:formConfiguration>
 
-	<p:elementGroup groupID="Identification" XPath="sml:identification/sml:IdentifierList">
+	<p:complexElementInstance groupID="Identification" XPath="sml:identification/sml:IdentifierList">
 		<p:elements>
-			<p:elementGroupRef groupRef="uniqueID"
+			<p:complexElementInstanceRef groupRef="uniqueID"
 				XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term" />
-			<p:elementGroupRef groupRef="shortName"
+			<p:complexElementInstanceRef groupRef="shortName"
 				XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term" />
-			<p:elementGroupRef groupRef="longName"
+			<p:complexElementInstanceRef groupRef="longName"
 				XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term" />
-			<p:elementGroupRef groupRef="deviceID"
+			<p:complexElementInstanceRef groupRef="deviceID"
 				XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term" />
-			<p:elementGroupRef groupRef="serialNumber"
+			<p:complexElementInstanceRef groupRef="serialNumber"
 				XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term" />
-			<p:elementGroupRef groupRef="WMO"
+			<p:complexElementInstanceRef groupRef="WMO"
 				XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term" />
 		</p:elements>
-	</p:elementGroup>
+	</p:complexElementInstance>
 
-	<p:elementGroup groupID="shortName"
+	<p:complexElementInstance groupID="shortName"
 		XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term">
 		<p:elements>
 			<p:elementInstanceString XPath="sml:label" ID="label_shortName">
@@ -129,8 +129,8 @@
 				<p:label>Short name (sml:value)</p:label>
 			</p:elementInstanceString>
 		</p:elements>
-	</p:elementGroup>
-	<p:elementGroup groupID="longName"
+	</p:complexElementInstance>
+	<p:complexElementInstance groupID="longName"
 		XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term">
 		<p:elements>
 			<p:elementInstanceString XPath="sml:label" ID="label_longName">
@@ -157,8 +157,8 @@
 				<p:label>Long name (sml:value)</p:label>
 			</p:elementInstanceString>
 		</p:elements>
-	</p:elementGroup>
-	<p:elementGroup groupID="uniqueID"
+	</p:complexElementInstance>
+	<p:complexElementInstance groupID="uniqueID"
 		XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term">
 		<p:elements>
 			<p:elementInstanceString XPath="sml:label" ID="label_uniqueID">
@@ -185,8 +185,8 @@
 				<p:label>Unique ID (sml:value)</p:label>
 			</p:elementInstanceString>
 		</p:elements>
-	</p:elementGroup>
-	<p:elementGroup groupID="deviceID"
+	</p:complexElementInstance>
+	<p:complexElementInstance groupID="deviceID"
 		XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term">
 		<p:elements>
 			<p:elementInstanceString XPath="sml:label" ID="label_deviceID">
@@ -213,8 +213,8 @@
 				<p:label>Device ID (sml:value)</p:label>
 			</p:elementInstanceString>
 		</p:elements>
-	</p:elementGroup>
-	<p:elementGroup groupID="serialNumber"
+	</p:complexElementInstance>
+	<p:complexElementInstance groupID="serialNumber"
 		XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term">
 		<p:elements>
 			<p:elementInstanceString XPath="sml:label" ID="label_serialNumber">
@@ -241,8 +241,8 @@
 				<p:label>Serial number (sml:value)</p:label>
 			</p:elementInstanceString>
 		</p:elements>
-	</p:elementGroup>
-	<p:elementGroup groupID="WMO"
+	</p:complexElementInstance>
+	<p:complexElementInstance groupID="WMO"
 		XPath="sml:identification/sml:IdentifierList/sml:identifier/sml:Term">
 		<p:elements>
 			<p:elementInstanceString XPath="sml:label" ID="label_WMO">
@@ -269,9 +269,9 @@
 				<p:label>WMO (sml:value)</p:label>
 			</p:elementInstanceString>
 		</p:elements>
-	</p:elementGroup>
+	</p:complexElementInstance>
 
-	<p:elementGroup groupID="TimePeriod" XPath="sml:validTime/gml:TimePeriod">
+	<p:complexElementInstance groupID="TimePeriod" XPath="sml:validTime/gml:TimePeriod">
 		<p:elements>
 			<p:elementInstanceString ID="ID_TimePeriod" XPath="gml:id">
 				<p:restrictions>
@@ -281,12 +281,12 @@
 				</p:restrictions>
 			</p:elementInstanceString>
 		</p:elements>
-	</p:elementGroup>
+	</p:complexElementInstance>
 
 
-	<p:elementGroup groupID="Position" XPath="sml:position/swe:DataRecord">
+	<p:complexElementInstance groupID="Position" XPath="sml:position/swe:DataRecord">
 		<p:elements>
-			<p:elementGroup groupID="location_field" XPath="swe:field">
+			<p:complexElementInstance groupID="location_field" XPath="swe:field">
 				<p:elements>
 					<p:elementInstanceNCName ID="name_location_field" XPath="@name">
 						<p:restrictions>
@@ -295,9 +295,9 @@
 							</p:fixContent>
 						</p:restrictions>
 					</p:elementInstanceNCName>
-					<p:elementGroup groupID="vector_location_field" XPath="swe:Vector">
+					<p:complexElementInstance groupID="vector_location_field" XPath="swe:Vector">
 						<p:elements>
-							<p:elementGroup groupID="latitude_coordinate" XPath="swe:coordinate">
+							<p:complexElementInstance groupID="latitude_coordinate" XPath="swe:coordinate">
 								<p:elements>
 									<p:elementInstanceNCName ID="name_latitude_coordinate" XPath="@name">
 										<p:restrictions>
@@ -306,10 +306,10 @@
 											</p:fixContent>
 										</p:restrictions>
 									</p:elementInstanceNCName>
-									<p:elementGroupRef groupRef="latitude_Quantity" XPath="swe:coordinate/swe:Quantity" />
+									<p:complexElementInstanceRef groupRef="latitude_Quantity" XPath="swe:coordinate/swe:Quantity" />
 								</p:elements>
-							</p:elementGroup>
-							<p:elementGroup groupID="longitude_coordinate" XPath="swe:coordinate">
+							</p:complexElementInstance>
+							<p:complexElementInstance groupID="longitude_coordinate" XPath="swe:coordinate">
 								<p:elements>
 									<p:elementInstanceNCName ID="name_longitude_coordinate" XPath="@name">
 										<p:restrictions>
@@ -318,10 +318,10 @@
 											</p:fixContent>
 										</p:restrictions>
 									</p:elementInstanceNCName>
-									<p:elementGroupRef groupRef="longitude_Quantity" XPath="swe:coordinate/swe:Quantity" />
+									<p:complexElementInstanceRef groupRef="longitude_Quantity" XPath="swe:coordinate/swe:Quantity" />
 								</p:elements>
-							</p:elementGroup>
-							<p:elementGroup groupID="altitude_coordinate" XPath="swe:coordinate">
+							</p:complexElementInstance>
+							<p:complexElementInstance groupID="altitude_coordinate" XPath="swe:coordinate">
 								<p:elements>
 									<p:elementInstanceNCName ID="name_altitude_coordinate" XPath="@name">
 										<p:restrictions>
@@ -330,15 +330,15 @@
 											</p:fixContent>
 										</p:restrictions>
 									</p:elementInstanceNCName>
-									<p:elementGroupRef groupRef="altitude_Quantity" XPath="swe:coordinate/swe:Quantity" />
+									<p:complexElementInstanceRef groupRef="altitude_Quantity" XPath="swe:coordinate/swe:Quantity" />
 								</p:elements>
-							</p:elementGroup>
+							</p:complexElementInstance>
 						</p:elements>
-					</p:elementGroup>
+					</p:complexElementInstance>
 
 				</p:elements>
-			</p:elementGroup>
-			<!-- <p:elementGroup groupID="orientation_field" XPath="swe:field"> -->
+			</p:complexElementInstance>
+			<!-- <p:complexElementInstance groupID="orientation_field" XPath="swe:field"> -->
 			<!-- <p:elements> -->
 			<!-- <p:elementInstanceNCName ID="name_orientation_field" XPath="@name"> -->
 			<!-- <p:restrictions> -->
@@ -348,11 +348,11 @@
 			<!-- </p:restrictions> -->
 			<!-- </p:elementInstanceNCName> -->
 			<!-- </p:elements> -->
-			<!-- </p:elementGroup> -->
+			<!-- </p:complexElementInstance> -->
 		</p:elements>
-	</p:elementGroup>
+	</p:complexElementInstance>
 
-	<p:elementGroup groupID="longitude_Quantity" XPath="swe:coordinate/swe:Quantity">
+	<p:complexElementInstance groupID="longitude_Quantity" XPath="swe:coordinate/swe:Quantity">
 		<p:elements>
 			<p:elementInstanceAnyURI ID="referenceFrame_longitude_Quantity" XPath="@referenceFrame">
 				<p:restrictions>
@@ -383,9 +383,9 @@
 				</p:restrictions>
 			</p:elementInstanceDouble>
 		</p:elements>
-	</p:elementGroup>
+	</p:complexElementInstance>
 
-	<p:elementGroup groupID="latitude_Quantity" XPath="swe:coordinate/swe:Quantity">
+	<p:complexElementInstance groupID="latitude_Quantity" XPath="swe:coordinate/swe:Quantity">
 		<p:elements>
 			<p:elementInstanceAnyURI ID="referenceFrame_latitude_Quantity" XPath="@referenceFrame">
 				<p:restrictions>
@@ -401,7 +401,7 @@
 					</p:fixContent>
 				</p:restrictions>
 			</p:elementInstanceString>
-			<p:elementGroup groupID="uom_latitude_Quantity" XPath="swe:uom">
+			<p:complexElementInstance groupID="uom_latitude_Quantity" XPath="swe:uom">
 				<p:elements>
 					<p:elementInstanceString ID="code_uom_latitude_Quantity" XPath="@code">
 						<p:restrictions>
@@ -411,7 +411,7 @@
 						</p:restrictions>
 					</p:elementInstanceString>
 				</p:elements>
-			</p:elementGroup>
+			</p:complexElementInstance>
 			<p:elementInstanceDouble ID="value_latitude_Quantity" XPath="swe:value">
 				<p:restrictions>
 					<p:defaultContent>
@@ -420,9 +420,9 @@
 				</p:restrictions>
 			</p:elementInstanceDouble>
 		</p:elements>
-	</p:elementGroup>
+	</p:complexElementInstance>
 
-	<p:elementGroup groupID="altitude_Quantity" XPath="swe:coordinate/swe:Quantity">
+	<p:complexElementInstance groupID="altitude_Quantity" XPath="swe:coordinate/swe:Quantity">
 		<p:elements>
 			<p:elementInstanceAnyURI ID="referenceFrame_altitude_Quantity" XPath="@referenceFrame">
 				<p:restrictions>
@@ -438,7 +438,7 @@
 					</p:fixContent>
 				</p:restrictions>
 			</p:elementInstanceString>
-			<p:elementGroup groupID="uom_altitude_Position" XPath="swe:uom">
+			<p:complexElementInstance groupID="uom_altitude_Position" XPath="swe:uom">
 				<p:elements>
 					<p:elementInstanceString ID="code_uom_altitude_Position" XPath="@code">
 						<p:restrictions>
@@ -448,7 +448,7 @@
 						</p:restrictions>
 					</p:elementInstanceString>
 				</p:elements>
-			</p:elementGroup>
+			</p:complexElementInstance>
 			<p:elementInstanceDouble ID="value_altitude_Quantity" XPath="swe:value">
 				<p:restrictions>
 					<p:defaultContent>
@@ -457,6 +457,6 @@
 				</p:restrictions>
 			</p:elementInstanceDouble>
 		</p:elements>
-	</p:elementGroup>
+	</p:complexElementInstance>
 
 </p:profile>

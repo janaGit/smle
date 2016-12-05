@@ -237,7 +237,7 @@ export class Configuration {
 
 export class ReturnObject {
     private _model: AbstractProcess;
-    private uration: JSONDescriptionConfig;
+    private _configuration: JSONDescriptionConfig;
     get model(): AbstractProcess {
         return this._model;
     }
@@ -245,10 +245,10 @@ export class ReturnObject {
         this._model = model;
     }
     get configuration(): JSONDescriptionConfig {
-        return this.uration;
+        return this._configuration;
     }
     set configuration(configuration: JSONDescriptionConfig) {
-        this.uration = configuration;
+        this._configuration = configuration;
     }
 }
 
