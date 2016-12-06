@@ -77,7 +77,7 @@
 
 	<simpleType name="XPath">
 		<restriction base="token">
-			<pattern value="(((([A-Za-z]+[:])|@)[A-Za-z_]+)*/?)+" />
+			<pattern value="(((([A-Za-z]+[:])|@)[A-Za-z_]+(\[@[A-Za-z_]+\=[A-Za-z_]+\])?)*/?)+" />
 		</restriction>
 	</simpleType>
 

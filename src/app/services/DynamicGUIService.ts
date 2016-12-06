@@ -268,7 +268,7 @@ export class DynamicGUIService {
         this._loggerFactory = LFService.createLoggerFactory(new LoggerFactoryOptions()
             .addLogGroupRule(new LogGroupRule(new RegExp(".+"), LogLevel.Info)));
         this._logger = this._loggerFactory.getLogger("DynamicGuiService");
-        
+
         this._globalConfig["description"] = {};
         this._profileIDMap = new BidiMap();
         this._sensorML_decoder.profileIDMap = this._profileIDMap;
@@ -345,7 +345,7 @@ export class DynamicGUIService {
     }
     private setConfigurations() {
         for (let key in this._profile) {
-            if (key.indexOf('element') == 0 &&key.indexOf('elementInstance') != 0) {
+            if (key.indexOf('element') == 0 && key.indexOf('elementInstance') != 0) {
                 let abstractElements = this._profile[key];
                 if (Array.isArray(abstractElements)) {
                     for (var _key in abstractElements) {
@@ -364,7 +364,7 @@ export class DynamicGUIService {
         let configuration = new Configuration();
 
         this.setConfigurationValues(abstractElement, configuration);
-        let config = this._globalConfig["description"] ;
+        let config = this._globalConfig["description"];
         while (XPath.length > 0) {
             let xpathElement = XPath.shift();
             let prefix_elementName = xpathElement.prefix.toLowerCase() + ":" + xpathElement.element;
@@ -643,11 +643,30 @@ class InsertElements {
     private insertChild(cache: Cache, xpathElement: XPathElement, XPath: XPathElement[], configuration: Configuration): Cache {
         let child = new Cache();
         child.profileID = cache.profileID;
-        let childName = xpathElement.element;
+        let xpath = xpathElement.element.split("[");
+        let childName;
+        let attributes = {};
+        if (xpath.length == 2) {
+            childName = xpath[0];
+            let attribute = xpath[1].slice(0, -1);
+            let attributeList: string[] = attribute.split(",");
+            for (var attribute in attributeList) {
+                let a = attribute.split("=");
+                if (a.length == 2) {
+                    attributes[a[0].slice(1)] = a[1];
+                }
+            }
+        } else {
+            childName = xpathElement.element;
+        }
+
         if (XPath.length > 0 || (typeof configuration.valueFix == 'undefined' && typeof configuration.valueDefault == 'undefined')) {
             let childNode = this._model.createElementNS(Namespaces[xpathElement.prefix], xpathElement.prefix.toLowerCase() + ":" + childName);
             if (XPath.length == 0) {
                 childNode.setAttribute("profileID", cache.profileID);
+            }
+            for(let key in attributes){
+                childNode.setAttribute(key, attributes[key]);
             }
             cache.parent.appendChild(childNode);
             this._logger.info("New child: " + childNode.tagName + " appended");

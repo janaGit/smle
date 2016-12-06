@@ -2,6 +2,14 @@
 <p:profile xmlns:p="http://xmlProfile.de" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://xmlProfile.de Profile.xsd" class="sml:PhysicalSystem">
 
+	<p:formConfiguration>
+		<p:formComponent label="Form">
+			<p:complexElementInstance groupRef="Identification" />
+			<p:complexElementInstance groupRef="TimePeriod" />
+			<p:complexElementInstance groupRef="Position" />
+		</p:formComponent>
+	</p:formConfiguration>
+
 	<p:elementString XPath="gml:description">
 		<p:restrictions>
 			<p:use>required</p:use>
@@ -75,13 +83,9 @@
 			<p:numberField />
 		</p:input>
 	</p:elementDouble>
-	<p:formConfiguration>
-		<p:formComponent label="Form">
-			<p:complexElementInstance groupRef="Identification" />
-			<p:complexElementInstance groupRef="TimePeriod" />
-			<p:complexElementInstance groupRef="Position" />
-		</p:formComponent>
-	</p:formConfiguration>
+
+	<p:BeginElementInstances />
+
 	<p:complexElementInstance groupID="Identification" XPath="sml:identification/sml:IdentifierList">
 		<p:elements>
 			<p:complexElementInstanceRef groupRef="uniqueID"
@@ -282,78 +286,20 @@
 	</p:complexElementInstance>
 
 
-	<p:complexElementInstance groupID="Position" XPath="sml:position/swe:DataRecord">
+	<p:complexElementInstance groupID="Position"
+		XPath="sml:position/swe:DataRecord/swe:field[@name=location]/swe:Vector">
 		<p:elements>
-			<p:complexElementInstance groupID="location_field" XPath="swe:field">
-				<p:elements>
-					<p:elementInstanceNCName ID="name_location_field" XPath="@name">
-						<p:restrictions>
-							<p:fixContent>
-								<p:value>location</p:value>
-							</p:fixContent>
-						</p:restrictions>
-					</p:elementInstanceNCName>
-					<p:complexElementInstance groupID="vector_location_field" XPath="swe:Vector">
-						<p:elements>
-							<p:complexElementInstance groupID="latitude_coordinate" XPath="swe:coordinate">
-								<p:elements>
-									<p:elementInstanceNCName ID="name_latitude_coordinate" XPath="@name">
-										<p:restrictions>
-											<p:fixContent>
-												<p:value>Lat</p:value>
-											</p:fixContent>
-										</p:restrictions>
-									</p:elementInstanceNCName>
-									<p:complexElementInstanceRef groupRef="latitude_Quantity"
-										XPath="swe:coordinate/swe:Quantity" />
-								</p:elements>
-							</p:complexElementInstance>
-							<p:complexElementInstance groupID="longitude_coordinate" XPath="swe:coordinate">
-								<p:elements>
-									<p:elementInstanceNCName ID="name_longitude_coordinate" XPath="@name">
-										<p:restrictions>
-											<p:fixContent>
-												<p:value>Lon</p:value>
-											</p:fixContent>
-										</p:restrictions>
-									</p:elementInstanceNCName>
-									<p:complexElementInstanceRef groupRef="longitude_Quantity"
-										XPath="swe:coordinate/swe:Quantity" />
-								</p:elements>
-							</p:complexElementInstance>
-							<p:complexElementInstance groupID="altitude_coordinate" XPath="swe:coordinate">
-								<p:elements>
-									<p:elementInstanceNCName ID="name_altitude_coordinate" XPath="@name">
-										<p:restrictions>
-											<p:fixContent>
-												<p:value>Alt</p:value>
-											</p:fixContent>
-										</p:restrictions>
-									</p:elementInstanceNCName>
-									<p:complexElementInstanceRef groupRef="altitude_Quantity"
-										XPath="swe:coordinate/swe:Quantity" />
-								</p:elements>
-							</p:complexElementInstance>
-						</p:elements>
-					</p:complexElementInstance>
-
-				</p:elements>
-			</p:complexElementInstance>
-			<!-- <p:complexElementInstance groupID="orientation_field" XPath="swe:field"> -->
-			<!-- <p:elements> -->
-			<!-- <p:elementInstanceNCName ID="name_orientation_field" XPath="@name"> -->
-			<!-- <p:restrictions> -->
-			<!-- <p:fixContent> -->
-			<!-- <p:value>orientation</p:value> -->
-			<!-- </p:fixContent> -->
-			<!-- </p:restrictions> -->
-			<!-- </p:elementInstanceNCName> -->
-			<!-- </p:elements> -->
-			<!-- </p:complexElementInstance> -->
+			<p:complexElementInstanceRef groupRef="latitude_Quantity"
+				XPath="sml:position/swe:DataRecord/swe:field[@name=location]/swe:Vector/swe:coordinate[@name=Lat]/swe:Quantity" />
+			<p:complexElementInstanceRef groupRef="longitude_Quantity"
+				XPath="sml:position/swe:DataRecord/swe:field[@name=location]/swe:Vector/swe:coordinate[@name=Lon]/swe:Quantity" />
+			<p:complexElementInstanceRef groupRef="altitude_Quantity"
+				XPath="sml:position/swe:DataRecord/swe:field[@name=location]/swe:Vector/swe:coordinate[@name=Alt]/swe:Quantity" />
 		</p:elements>
 	</p:complexElementInstance>
 
-	<p:complexElementInstance groupID="longitude_Quantity" XPath="swe:coordinate/swe:Quantity">
+	<p:complexElementInstance groupID="longitude_Quantity"
+		XPath="sml:position/swe:DataRecord/swe:field[@name=location]/swe:Vector/swe:coordinate[@name=Lon]/swe:Quantity">
 		<p:elements>
 			<p:elementInstanceAnyURI ID="referenceFrame_longitude_Quantity" XPath="@referenceFrame">
 				<p:restrictions>
@@ -386,7 +332,8 @@
 		</p:elements>
 	</p:complexElementInstance>
 
-	<p:complexElementInstance groupID="latitude_Quantity" XPath="swe:coordinate/swe:Quantity">
+	<p:complexElementInstance groupID="latitude_Quantity"
+		XPath="sml:position/swe:DataRecord/swe:field[@name=location]/swe:Vector/swe:coordinate[@name=Lat]/swe:Quantity">
 		<p:elements>
 			<p:elementInstanceAnyURI ID="referenceFrame_latitude_Quantity" XPath="@referenceFrame">
 				<p:restrictions>
@@ -423,7 +370,8 @@
 		</p:elements>
 	</p:complexElementInstance>
 
-	<p:complexElementInstance groupID="altitude_Quantity" XPath="swe:coordinate/swe:Quantity">
+	<p:complexElementInstance groupID="altitude_Quantity"
+		XPath="sml:position/swe:DataRecord/swe:field[@name=location]/swe:Vector/swe:coordinate[@name=Alt]/swe:Quantity">
 		<p:elements>
 			<p:elementInstanceAnyURI ID="referenceFrame_altitude_Quantity" XPath="@referenceFrame">
 				<p:restrictions>

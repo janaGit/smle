@@ -28,24 +28,14 @@
 	<element name="profile">
 		<complexType>
 			<sequence>
-				<choice maxOccurs="unbounded">
-					<element ref="profile:element" />
-					<element name="choice">
-						<complexType>
-							<sequence>
-								<element name="label" type="string" minOccurs="0" />
-								<element name="description" type="string" minOccurs="0" />
-								<element ref="profile:element" minOccurs="0" maxOccurs="unbounded" />
-							</sequence>
-						</complexType>
-					</element>
-				</choice>
 				<element name="formConfiguration" type="profile:editor_config_formType">
 					<annotation>
 						<documentation>Description of the structure of the form.</documentation>
 					</annotation>
 				</element>
-				<choice maxOccurs="unbounded">
+				<element ref="profile:element" minOccurs="0" maxOccurs="unbounded"/>
+				<element name="BeginElementInstances"/>
+				<choice  minOccurs="0" maxOccurs="unbounded">
 					<element ref="profile:elementInstance" />
 					<element ref="profile:complexElementInstance">
 						<annotation>
@@ -453,7 +443,7 @@
 			</element>
 		</sequence>
 	</complexType>
-<!-- Keys and Unique elements / attributes -->
+	<!-- Keys and Unique elements / attributes -->
 	<group name="keys">
 		<choice>
 			<element name="key" type="profile:keyType" />
