@@ -14,8 +14,9 @@ import { SimpleProcess } from '../model/sml/SimpleProcess';
 import { ObjectTreeComponent } from './components/basic/object-tree/ObjectTreeComponent';
 
 import { Http, Response } from '@angular/http';
+import { DynamicGUIService} from '../services/dynamicGUI/DynamicGUIService';
+import { DynamicGUIObject } from '../services/dynamicGUI/DynamicGUIObject';
 
-import { DynamicGUIService,ReturnObject } from '../services/DynamicGUIService';
 enum DescriptionType {
     PhysicalSystem = 1,
     PhysicalComponent = 2,
@@ -67,7 +68,7 @@ export class Editor implements OnInit {
         } else if (type === 'PhysicalComponent') {
             this.setDescription(new PhysicalComponent());
         } else {
-            this.dynamicGUIService.getModelAndConfiguration().subscribe((returnObject: ReturnObject) => {
+            this.dynamicGUIService.getModelAndConfiguration().subscribe((returnObject: DynamicGUIObject) => {
                 this.setDescription(returnObject.model);
                 this.config = returnObject.configuration;
               //  alert("this.config:" + JSON.stringify(returnObject.configuration))

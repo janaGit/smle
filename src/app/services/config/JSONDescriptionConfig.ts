@@ -2,7 +2,8 @@ import { DefaultDescriptionConfig } from './DefaultDescriptionConfig';
 import { DescriptionConfig } from './DescriptionConfig';
 import { TrueDescriptionConfig } from './TrueDescriptionConfig';
 import { FalseDescriptionConfig } from './FalseDescriptionConfig';
-import { BidiMap, Configuration, FormFields} from '../DynamicGUIService';
+import { BidiMap} from '../dynamicGUI/BidiMap';
+import { DynamicGUIConfiguration} from '../dynamicGUI/DynamicGUIConfiguration';
 import {LFService, LoggerFactoryOptions, LogLevel, LogGroupRule, LoggerFactory, Logger} from "typescript-logging"
 
 
@@ -27,7 +28,7 @@ export class JSONDescriptionConfig implements DescriptionConfig {
                     if (typeof value._requireValue != "undefined" && typeof value._requireValue != "undefined") {
                         return value._requireValue;
                     }
-                    return new Configuration().getDefaultConfiguration()["requireValue"];
+                    return new DynamicGUIConfiguration().getDefaultConfiguration()["requireValue"];
 
                 }
                 return elementConfig;
@@ -48,7 +49,7 @@ export class JSONDescriptionConfig implements DescriptionConfig {
                         return value._existInForm;
                     }
                 }
-                return new Configuration().getDefaultConfiguration()["existInForm"];
+                return new DynamicGUIConfiguration().getDefaultConfiguration()["existInForm"];
 
             }
             return elementConfig;
@@ -66,7 +67,7 @@ export class JSONDescriptionConfig implements DescriptionConfig {
                         return value._fixValue;
                     }
                 }
-                return new Configuration().getDefaultConfiguration()["fixValue"];
+                return new DynamicGUIConfiguration().getDefaultConfiguration()["fixValue"];
 
 
             }
@@ -87,7 +88,7 @@ export class JSONDescriptionConfig implements DescriptionConfig {
                     }
 
                 }
-                return new Configuration().getDefaultConfiguration()["fixQuantity"];
+                return new DynamicGUIConfiguration().getDefaultConfiguration()["fixQuantity"];
 
 
             }
@@ -108,7 +109,7 @@ export class JSONDescriptionConfig implements DescriptionConfig {
                     } return true;
                 }
                 this._logger.info("use default configuration for: "+name);
-                return new Configuration().getDefaultConfiguration()["hideField"][formFieldType];
+                return new DynamicGUIConfiguration().getDefaultConfiguration()["hideField"][formFieldType];
 
 
             }
@@ -129,7 +130,7 @@ export class JSONDescriptionConfig implements DescriptionConfig {
                         return value._label;
                     }
                 }
-                return new Configuration().getDefaultConfiguration()["label"];
+                return new DynamicGUIConfiguration().getDefaultConfiguration()["label"];
 
 
             }
@@ -149,7 +150,7 @@ export class JSONDescriptionConfig implements DescriptionConfig {
         let profileID = this._profileIDMap.getProfileID(model, fieldName);
 
         if (profileID) {
-            let configuration: Configuration = this._elementConfig[profileID];
+            let configuration: DynamicGUIConfiguration = this._elementConfig[profileID];
             if (configType == "hideField") {
                 if (typeof configuration[configType][formField] != "undefined") {
                     return !configuration[configType][formField];

@@ -1,56 +1,20 @@
-import * as smlLib from '../model/sml';
+import * as smlLib from '../../model/sml';
 import { Http, Response } from '@angular/http';
 import {Injectable} from '@angular/core';
 import {Observable}     from 'rxjs/Observable';
-import { JSONDescriptionConfig } from './config/JSONDescriptionConfig';
+import { JSONDescriptionConfig } from './../config/JSONDescriptionConfig';
 
 import {LFService, LoggerFactoryOptions, LogLevel, LogGroupRule, LoggerFactory, Logger} from "typescript-logging"
 
-import {SensorMLDocumentEncoder} from './xml/SensorMLDocumentEncoder';
-import {SensorMLDocumentDecoder} from './xml/SensorMLDocumentDecoder';
-import { AbstractProcess } from '../model/sml/AbstractProcess';
-import { Namespaces } from './xml/Namespaces';
-
+import {SensorMLDocumentEncoder} from './../xml/SensorMLDocumentEncoder';
+import {SensorMLDocumentDecoder} from './../xml/SensorMLDocumentDecoder';
+import { AbstractProcess } from '../../model/sml/AbstractProcess';
+import { Namespaces } from './../xml/Namespaces';
+import { BidiMap } from './BidiMap';
+import { DynamicGUIObject } from './DynamicGUIObject';
+import { DynamicGUIConfiguration} from './DynamicGUIConfiguration';
 declare var X2JS: any;
 
-export class BidiMap {
-    private elementToID: Map<any, Map<string, string>>;
-    private IDToElement: Map<string, ObjectAndProperty>;
-    private _loggerFactory: LoggerFactory;
-    private _logger: Logger;
-
-    constructor() {
-        this.elementToID = new Map<any, Map<string, string>>();
-        this.IDToElement = new Map<string, ObjectAndProperty>();
-
-        this._loggerFactory = LFService.createLoggerFactory(new LoggerFactoryOptions()
-            .addLogGroupRule(new LogGroupRule(new RegExp(".+"), LogLevel.Fatal)));
-        this._logger = this._loggerFactory.getLogger("BidiMap");
-    }
-    public addLinkage(elementObject: any, objectProperty: string, profileID: string) {
-        let elementAndPrefix = new ObjectAndProperty(elementObject, objectProperty);
-        let innerMap = this.elementToID.get(elementObject);
-        if (!innerMap) {
-            innerMap = new Map<string, string>();
-        }
-        innerMap.set(objectProperty, profileID);
-        this.elementToID.set(elementObject, innerMap);
-        this.IDToElement.set(profileID, elementAndPrefix);
-    }
-    public getProfileID(modelObject: any, objectProperty: string): string {
-        if (!modelObject || !objectProperty) throw new Error("One or both paramerter error: modelObject" + modelObject + " objectProperty:" + objectProperty);
-        this._logger.info("get ProfileID for object:" + modelObject + " and property: " + objectProperty);
-        if (this.elementToID.get(modelObject) instanceof Map) {
-            let innerMap = this.elementToID.get(modelObject);
-            this._logger.info("found entry in BidiMap for object:" + modelObject);
-            return innerMap.get(objectProperty);
-        }
-
-    }
-    public getElementObject(profileID: string): any {
-        return this.IDToElement.get(profileID);
-    }
-}
 class XPathElement {
     private _element: string;
     private _prefix: string;
@@ -71,26 +35,7 @@ class XPathElement {
         this._prefix = prefix;
     }
 }
-class ObjectAndProperty {
-    private _object: any;
-    private _property: string;
-    constructor(object: any, property: string) {
-        this._object = object;
-        this._property = property;
-    }
-    get object(): any {
-        return this._object;
-    }
-    set object(object: any) {
-        this._object = object;
-    }
-    get property(): string {
-        return this._property;
-    }
-    set prefix(property: string) {
-        this._property = property;
-    }
-}
+
 class Cache {
     private _parent: Element;
     private _profileID: string;
@@ -112,147 +57,11 @@ class Cache {
     }
 }
 
-export class FormFields {
-    private _calendar: boolean;
-    private _textField: boolean;
-    private _map: boolean;
-    private _checkbox: boolean;
-    private _selectionBox: boolean;
-    private _numberField: boolean;
-
-    get calendar(): boolean {
-        return this._calendar;
-    }
-    set calendar(calendar: boolean) {
-        this._calendar = calendar;
-    }
-    get textField(): boolean {
-        return this._textField;
-    }
-    set textField(textField: boolean) {
-        this._textField = textField;
-    }
-    get map(): boolean {
-        return this._map;
-    }
-    set map(map: boolean) {
-        this._map = map;
-    }
-    get checkbox(): boolean {
-        return this._checkbox;
-    }
-    set checkbox(checkbox: boolean) {
-        this._checkbox = checkbox;
-    }
-    get selectionBox(): boolean {
-        return this._selectionBox;
-    }
-    set selectionBox(selectionBox: boolean) {
-        this._selectionBox = selectionBox;
-    }
-    get numberField(): boolean {
-        return this._numberField;
-    }
-    set numberField(numberField: boolean) {
-        this._numberField = numberField;
-    }
-}
-
-export class Configuration {
-    private _fixValue: boolean;
-    private _requireValue: boolean;
-    private _hideField: FormFields;
-    private _existInForm: boolean;
-    private _fixQuantity: boolean;
-    private _valueFix: any;
-    private _valueDefault: any;
-    private _label: string;
-    constructor() {
-        this._hideField = new FormFields();
-    }
-    get fixValue(): boolean {
-        return this._fixValue;
-    }
-    set fixValue(fixValue: boolean) {
-        this._fixValue = fixValue;
-    }
-    get requireValue(): boolean {
-        return this._requireValue;
-    }
-    set requireValue(requireValue: boolean) {
-        this._requireValue = requireValue;
-    }
-    get hideField(): FormFields {
-        return this._hideField;
-    }
-    set hideField(hideField: FormFields) {
-        this._hideField = hideField;
-    }
-
-    get existInForm(): boolean {
-        return this._existInForm;
-    }
-    set existInForm(existInForm: boolean) {
-        this._existInForm = existInForm;
-    }
-    get fixQuantity(): boolean {
-        return this._fixQuantity;
-    }
-    set fixQuantity(fixQuantity: boolean) {
-        this._fixQuantity = fixQuantity;
-    }
-    get valueFix(): any {
-        return this._valueFix;
-    }
-    set valueFix(valueFix: any) {
-        this._valueFix = valueFix;
-    }
-    get valueDefault(): any {
-        return this._valueDefault;
-    }
-    set valueDefault(valueDefault: any) {
-        this._valueDefault = valueDefault;
-    }
-    get label(): any {
-        return this._label;
-    }
-    set label(label: any) {
-        this._label = label;
-    }
-    public getDefaultConfiguration(): Configuration {
-        let configuration = new Configuration();
-        configuration.fixValue = false;
-        configuration.requireValue = false;
-        configuration.existInForm = true;
-        configuration.fixQuantity = false;
-        configuration.valueFix = null;
-        configuration.valueDefault = null;
-        return configuration;
-    }
-}
-
-export class ReturnObject {
-    private _model: AbstractProcess;
-    private _configuration: JSONDescriptionConfig;
-    get model(): AbstractProcess {
-        return this._model;
-    }
-    set model(model: AbstractProcess) {
-        this._model = model;
-    }
-    get configuration(): JSONDescriptionConfig {
-        return this._configuration;
-    }
-    set configuration(configuration: JSONDescriptionConfig) {
-        this._configuration = configuration;
-    }
-}
-
 @Injectable()
 export class DynamicGUIService {
     private _loggerFactory: LoggerFactory;
     private _logger: Logger;
-    private _insertElements: InsertElements;
+    private _XMLDocument: XMLDocument;
     private _model: Document;
     private _profile: any;
     private _elementConfig: Object = {};
@@ -280,13 +89,13 @@ export class DynamicGUIService {
                 throw new Error('JSON Object has no profile-element!');
             }
             this.createModel();
-            this.configure();
-            this.setConfigurations();
+            this.processFormConfiguration();
+            this.processGeneralElementDescriptions();
             this._logger.info('JSON profile:' + JSON.stringify(json));
             this._logger.info('model with the fix values:' + (this._model.documentElement.innerHTML));
             this._logger.info('element configuration:' + (JSON.stringify(this._elementConfig)));
             this._logger.info('global configuration:' + (JSON.stringify(this._globalConfig)));
-            let returnObject = new ReturnObject();
+            let returnObject = new DynamicGUIObject();
             returnObject.model = this._sensorML_decoder.decode(this._model);
             this._logger.info('profile IDs map:' + JSON.stringify(this._profileIDMap.getElementObject("value_shortName")));
             this._logger.info('model with the fix values:' + JSON.stringify(returnObject.model));
@@ -299,11 +108,11 @@ export class DynamicGUIService {
         let modelClass: XPathElement[] = this.splitXPath(this._profile._class);
         if (modelClass.length == 1) {
             this.setModel(modelClass[0].element);
-            this._insertElements = new InsertElements(this._model);
+            this._XMLDocument = new XMLDocument(this._model);
         }
     }
-
-    private configure() {
+// Process Form Configuration
+    private processFormConfiguration() {
         if (this._profile.formConfiguration) {
             let formComponents = this._profile.formConfiguration.formComponent;
             this.processFormComponents(formComponents);
@@ -321,25 +130,39 @@ export class DynamicGUIService {
             this.processFormComponent(formComponents);
         }
     }
-    private setConfigurations() {
+    private processFormComponent(formComponent: any) {
+        let cache = new Cache(this._model.documentElement);
+        for (var key in formComponent) {
+            if (key == 'complexElementInstance') {
+                this.processComplexElementInstanceRefs(cache, formComponent[key], "");
+            } else if (key == 'formComponent') {
+                this.processFormComponents(formComponent[key]);
+            } else if (key == 'elementInstance') {
+                this.processElementInstanceRefs(cache, formComponent[key]);
+            }
+        }
+    }
+    
+    // Process general element descriptions
+    private processGeneralElementDescriptions() {
         for (let key in this._profile) {
             if (key.indexOf('element') == 0 && key.indexOf('elementInstance') != 0) {
                 let abstractElements = this._profile[key];
                 if (Array.isArray(abstractElements)) {
                     for (var _key in abstractElements) {
-                        this.setConfiguration(abstractElements[_key]);
+                        this.processGeneralElementDescription(abstractElements[_key]);
                     }
                 } else {
-                    this.setConfiguration(abstractElements);
+                    this.processGeneralElementDescription(abstractElements);
 
                 }
 
             }
         }
     }
-    private setConfiguration(abstractElement: any) {
+    private processGeneralElementDescription(abstractElement: any) {
         let XPath: XPathElement[] = this.splitXPath(abstractElement._XPath);
-        let configuration = new Configuration();
+        let configuration = new DynamicGUIConfiguration();
 
         this.setConfigurationValues(abstractElement, configuration);
         let config = this._globalConfig["description"];
@@ -357,18 +180,7 @@ export class DynamicGUIService {
             }
         }
     }
-    private processFormComponent(formComponent: any) {
-        let cache = new Cache(this._model.documentElement);
-        for (var key in formComponent) {
-            if (key == 'complexElementInstance') {
-                this.processElementGroupRefs(cache, formComponent[key], "");
-            } else if (key == 'formComponent') {
-                this.processFormComponents(formComponent[key]);
-            } else if (key == 'elementInstance') {
-                this.processElementInstanceRefs(cache, formComponent[key]);
-            }
-        }
-    }
+// Process element instance references
     private processElementInstanceRefs(cache: Cache, elements: any) {
         if (Array.isArray(elements)) {
             for (var key in elements) {
@@ -388,19 +200,21 @@ export class DynamicGUIService {
                     for (var _key in elementGlobal) {
                         if (ref == elementGlobal[_key]._ID) {
                             this._logger.info('Single global element found: ' + elementGlobal[_key]._ID);
-                            this.insertSingleElement(cache, elementGlobal[_key]);
+                            this.processElementInstance(cache, elementGlobal[_key]);
                         }
                     }
                 } else {
                     if (ref == elementGlobal._ID) {
                         this._logger.info('Single global element found: ' + elementGlobal._ID);
-                        this.insertSingleElement(cache, elementGlobal);
+                        this.processElementInstance(cache, elementGlobal);
                     }
                 }
             }
         }
     }
-    private processElementGroupRefs(cache: Cache, complexElementInstances: any, parentXPath: string) {
+    
+    //Process complex element instance references
+    private processComplexElementInstanceRefs(cache: Cache, complexElementInstances: any, parentXPath: string) {
         if (Array.isArray(complexElementInstances)) {
             for (var key in complexElementInstances) {
                 this.processElementGroupRef(cache, complexElementInstances[key], parentXPath);
@@ -417,27 +231,29 @@ export class DynamicGUIService {
                 if (Array.isArray(complexElementInstancesGlobal)) {
                     for (var _key in complexElementInstancesGlobal) {
                         if (groupID == complexElementInstancesGlobal[_key]._groupID) {
-                            this.processElementGroup(cache, complexElementInstancesGlobal[_key], parentXPath, true);
+                            this.processComplexElementInstance(cache, complexElementInstancesGlobal[_key], parentXPath, true);
                         }
                     }
                 } else {
                     if (groupID == complexElementInstancesGlobal._groupID) {
-                        this.processElementGroup(cache, complexElementInstancesGlobal, parentXPath, true);
+                        this.processComplexElementInstance(cache, complexElementInstancesGlobal, parentXPath, true);
                     }
                 }
             }
         }
     }
-    private processElementGroups(cache: Cache, complexElementInstances: any, parentXPath: string, global: boolean) {
+    
+    //Process complex element instances
+    private processComplexElementInstances(cache: Cache, complexElementInstances: any, parentXPath: string, global: boolean) {
         if (Array.isArray(complexElementInstances)) {
             for (var key in complexElementInstances) {
-                this.processElementGroup(cache, complexElementInstances[key], parentXPath, global);
+                this.processComplexElementInstance(cache, complexElementInstances[key], parentXPath, global);
             }
         } else {
-            this.processElementGroup(cache, complexElementInstances, parentXPath, global);
+            this.processComplexElementInstance(cache, complexElementInstances, parentXPath, global);
         }
     }
-    private processElementGroup(cache: Cache, complexElementInstance: any, parentXPath: string, global: boolean) {
+    private processComplexElementInstance(cache: Cache, complexElementInstance: any, parentXPath: string, global: boolean) {
         let elements = complexElementInstance.elements;
         let XPath: string = complexElementInstance._XPath;
         if (global) {
@@ -450,33 +266,34 @@ export class DynamicGUIService {
         }
 
         let xpath: XPathElement[] = this.splitXPath(XPath);
-        let configuration = new Configuration();
+        let configuration = new DynamicGUIConfiguration();
         configuration = this.setConfigurationValues(complexElementInstance, configuration);
         this._elementConfig[complexElementInstance._groupID] = configuration;
         cache.profileID = complexElementInstance._groupID;
-        let _cache = this._insertElements.add(cache, xpath, configuration);
+        let _cache = this._XMLDocument.add(cache, xpath, configuration);
         for (var key in elements) {
             if (key.indexOf('elementInstance') == 0) {
-                this.insertSingleElements(_cache, elements[key]);
+                this.processElementInstances(_cache, elements[key]);
             } else if (key == "complexElementInstanceRef") {
-                this.processElementGroupRefs(_cache, elements[key], XPath);
+                this.processComplexElementInstanceRefs(_cache, elements[key], XPath);
             } else if (key == "complexElementInstance") {
-                this.processElementGroups(_cache, elements[key], XPath, false);
+                this.processComplexElementInstances(_cache, elements[key], XPath, false);
             }
         }
     }
 
-    private insertSingleElements(cache: Cache, elements: any) {
+//Process element instances
+    private processElementInstances(cache: Cache, elements: any) {
         if (Array.isArray(elements)) {
             for (var key in elements) {
-                this.insertSingleElement(cache, elements[key]);
+                this.processElementInstance(cache, elements[key]);
             }
         } else {
-            this.insertSingleElement(cache, elements);
+            this.processElementInstance(cache, elements);
         }
     }
-    private insertSingleElement(cache: Cache, element: any) {
-        let configuration = new Configuration();
+    private processElementInstance(cache: Cache, element: any) {
+        let configuration = new DynamicGUIConfiguration();
         configuration.valueFix = null;
         configuration.valueDefault = null;
         configuration = this.setConfigurationValues(element, configuration);
@@ -484,10 +301,10 @@ export class DynamicGUIService {
         let xpath = element._XPath;
         cache.profileID = element._ID;
         let xpathElement: XPathElement[] = this.splitXPath(xpath);
-        this._insertElements.add(cache, xpathElement, configuration);
+        this._XMLDocument.add(cache, xpathElement, configuration);
     }
 
-    private setConfigurationValues(element: any, configuration: Configuration): Configuration {
+    private setConfigurationValues(element: any, configuration: DynamicGUIConfiguration): DynamicGUIConfiguration {
 
         if (element.restrictions) {
             if (element.restrictions["fixContent"]) {
@@ -546,7 +363,6 @@ export class DynamicGUIService {
         return this.http.get('../../profiles/Profile_discovery.xml').map((response: Response) => {
             var x2js = new X2JS();
             var json = x2js.xml2js(response.text());
-            //   alert(JSON.stringify(json));
             return json;
         });
     }
@@ -599,17 +415,17 @@ export class DynamicGUIService {
 
 }
 
-class InsertElements {
+class XMLDocument {
     private _loggerFactory: LoggerFactory;
     private _logger: Logger;
     private _model: Document;
     constructor(model: Document) {
         this._loggerFactory = LFService.createLoggerFactory(new LoggerFactoryOptions()
             .addLogGroupRule(new LogGroupRule(new RegExp(".+"), LogLevel.Info)));
-        this._logger = this._loggerFactory.getLogger("DynamicGuiService");
+        this._logger = this._loggerFactory.getLogger("InsertElements");
         this._model = model;
     }
-    public add(cache: Cache, XPath: XPathElement[], configuration: Configuration): Cache {
+    public add(cache: Cache, XPath: XPathElement[], configuration: DynamicGUIConfiguration): Cache {
         while (XPath.length > 0) {
             let xpathElement = XPath.shift();
             this._logger.info('XPath.length:' + XPath.length);
@@ -618,7 +434,7 @@ class InsertElements {
         }
         return cache;
     }
-    private insertChild(cache: Cache, xpathElement: XPathElement, XPath: XPathElement[], configuration: Configuration): Cache {
+    private insertChild(cache: Cache, xpathElement: XPathElement, XPath: XPathElement[], configuration: DynamicGUIConfiguration): Cache {
         let child = new Cache();
         child.profileID = cache.profileID;
         let xpath = xpathElement.element.split("[");
@@ -643,7 +459,7 @@ class InsertElements {
             if (XPath.length == 0) {
                 childNode.setAttribute("profileID", cache.profileID);
             }
-            for(let key in attributes){
+            for (let key in attributes) {
                 childNode.setAttribute(key, attributes[key]);
             }
             cache.parent.appendChild(childNode);
