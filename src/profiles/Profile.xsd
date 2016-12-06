@@ -28,34 +28,34 @@
 	<element name="profile">
 		<complexType>
 			<sequence>
-				<element name="formConfiguration" type="profile:editor_config_formType">
+				<element name="formConfiguration" type="profile:formConfigurationType">
 					<annotation>
 						<documentation>Description of the structure of the form.</documentation>
 					</annotation>
 				</element>
 				<element ref="profile:element" minOccurs="0" maxOccurs="unbounded">
 					<annotation>
-						<documentation>Elements for the description of the general restrictions and specifications
+						<documentation>Elements for the description of the general restrictions and specifications.
 						</documentation>
 					</annotation>
 				</element>
 				<element name="BeginElementInstances">
 					<annotation>
 						<documentation>Element that separate the elements for the general description from the
-							elements for the instance description
+							elements for the instance description.
 						</documentation>
 					</annotation>
 				</element>
 				<choice minOccurs="0" maxOccurs="unbounded">
 					<element ref="profile:elementInstance">
 						<annotation>
-							<documentation>Elements for the description of the element instances</documentation>
+							<documentation>Elements for the description of the element instances.</documentation>
 						</annotation>
 					</element>
 					<element ref="profile:complexElementInstance">
 						<annotation>
 							<documentation>Description of the complex element instance. They can contain further element
-								instances and complex element instances
+								instances and complex element instances.
 							</documentation>
 						</annotation>
 					</element>
@@ -68,7 +68,7 @@
 			</sequence>
 			<attribute name="class" type="string">
 				<annotation>
-					<documentation>The name of the root of the XML document</documentation>
+					<documentation>The name of the root of the XML document.</documentation>
 				</annotation>
 			</attribute>
 			<!-- The following asserts test, if the referenced elementInstances are a number type -->
@@ -155,19 +155,20 @@
 			<assert
 				test="not(.//*[./../../profile:occurrence/profile:occur&gt;1 or ./../../profile:occurrence/profile:maxOccurs&gt;1 or ./../../profile:occurrence/profile:minOccurs&gt;1]/@ID = .//*[not(profile:enumeration)]/profile:fixContent/profile:ref/@ref)">
 				<annotation>
-					<documentation>Test, if the reference of fix content is not a multi-element</documentation>
+					<documentation>Test, if the reference of fix content is not a multi-element.</documentation>
 				</annotation>
 			</assert>
 			<assert
 				test="not(.//*[./*/profile:occurrence/profile:occur&gt;1 or ./*/profile:occurrence/profile:maxOccurs&gt;1 or ./*/profile:occurrence/profile:minOccurs&gt;1]/@ID = .//*[not(profile:enumeration)]/profile:fixContent/profile:ref/@ref)">
 				<annotation>
-					<documentation>Test, if the reference of fix content is not a multi-element</documentation>
+					<documentation>Test, if the reference of fix content is not a multi-element.</documentation>
 				</annotation>
 			</assert>
 		</complexType>
+		<!-- unique element IDs -->
 		<unique name="elementID">
 			<annotation>
-				<documentation>Every element has to have a unique ID.</documentation>
+				<documentation>Every instance element has to have a unique ID.</documentation>
 			</annotation>
 			<selector xpath=".//*" />
 			<field xpath="@ID" />
@@ -180,20 +181,21 @@
 			<selector xpath=".//*" />
 			<field xpath="@ref" />
 		</keyref>
+		<!-- unique complex element instances -->
 		<key name="complexElementInstance_ID">
 			<annotation>
-				<documentation>Every complexElementInstance name has to be unique</documentation>
+				<documentation>Every complexElementInstance name has to be unique.</documentation>
 			</annotation>
 			<selector xpath="profile:complexElementInstance" />
-			<field xpath="@groupID" />
+			<field xpath="@complexElementID" />
 		</key>
 		<key name="complexElementInstance_ID_XPath">
 			<annotation>
-				<documentation>Every complexElementInstance name has to be unique
+				<documentation>Every complexElementInstance name and XPath combination has to be unique.
 				</documentation>
 			</annotation>
 			<selector xpath="profile:complexElementInstance" />
-			<field xpath="@groupID" />
+			<field xpath="@complexElementID" />
 			<field xpath="@XPath" />
 		</key>
 		<keyref name="complexElementInstance_name_ref" refer="profile:complexElementInstance_ID">
@@ -204,7 +206,7 @@
 				</documentation>
 			</annotation>
 			<selector xpath=".//*" />
-			<field xpath="@groupRef" />
+			<field xpath="@complexElementRef" />
 		</keyref>
 		<keyref name="complexElementInstance_name_XPath_ref" refer="profile:complexElementInstance_ID_XPath">
 			<annotation>
@@ -214,9 +216,10 @@
 				</documentation>
 			</annotation>
 			<selector xpath=".//*" />
-			<field xpath="@groupRef" />
+			<field xpath="@complexElementRef" />
 			<field xpath="@XPath" />
 		</keyref>
+		<!-- unique form components -->
 		<key name="editor-formComponent-names">
 			<annotation>
 				<documentation>Every formComponent name has to be unique within the
@@ -226,6 +229,11 @@
 			<selector xpath=".//profile:editor_config_form" />
 			<field xpath="profile:formComponent/@name" />
 		</key>
+		<keyref name="formComponent_complexElementInstance_ref" refer="profile:complexElementInstance_ID">
+			<selector xpath=".//formComponent/profile:complexElementInstance" />
+			<field xpath="@complexElementRef" />
+		</keyref>
+		<!-- unique key and unique definitions -->
 		<key name="key_unique_names">
 			<selector xpath=".//profile:keys/profile:key|.//profile:keys/profile:unique" />
 			<field xpath="@name"></field>
@@ -238,18 +246,10 @@
 			<selector xpath=".//profile:dependenceRules/profile:keyRef" />
 			<field xpath="@refer" />
 		</keyref>
-		<keyref name="formComponent_complexElementInstance_ref" refer="profile:complexElementInstance_ID">
-			<selector xpath=".//formComponent/profile:complexElementInstance" />
-			<field xpath="@name" />
-		</keyref>
-		<keyref name="formComponent_complexElementInstance_choice_ref" refer="profile:complexElementInstance_ID">
-			<selector xpath=".//profile:formComponent/profile:complexElementInstance_choice" />
-			<field xpath="@groupRef" />
-		</keyref>
 	</element>
 
-
-	<complexType name="editor_config_formType">
+	<!-- Form Configuration -->
+	<complexType name="formConfigurationType">
 		<sequence>
 			<element name="formComponent" type="profile:formComponentType" maxOccurs="unbounded" />
 		</sequence>
@@ -262,7 +262,7 @@
 				<element name="formComponent" type="profile:formComponentType" />
 				<element name="complexElementInstance">
 					<complexType>
-						<attribute name="groupRef" type="string" use="required" />
+						<attribute name="complexElementRef" type="string" use="required" />
 					</complexType>
 				</element>
 				<element name="elementInstance">
@@ -275,59 +275,99 @@
 		<attribute name="label" type="NMTOKEN" use="required" />
 	</complexType>
 
-	<!-- Group dependenceRules -->
+	<!-- global dependenceRules -->
 	<complexType name="global_dependenceRulesType">
-		<choice maxOccurs="unbounded">
-			<group ref="profile:logical_operation_complexElementInstance" />
-			<element name="implication" type="profile:implication_complexElementInstanceType" />
-		</choice>
+		<sequence>
+			<element name="logic" minOccurs="0">
+				<complexType>
+					<choice maxOccurs="unbounded">
+						<group ref="profile:global_logical_operation" />
+						<element name="implication" type="profile:global_implication" />
+					</choice>
+				</complexType>
+			</element>
+			<element name="keys" minOccurs="0">
+				<complexType>
+					<group ref="profile:globalKeys" maxOccurs="unbounded" />
+				</complexType>
+			</element>
+		</sequence>
 	</complexType>
-	<group name="logical_operation_complexElementInstance">
+	<group name="global_logical_operation">
 		<choice>
-			<element name="AND" type="profile:logical_operation_complexElementInstanceType" />
-			<element name="OR" type="profile:logical_operation_complexElementInstanceType" />
-			<element name="XOR" type="profile:logical_operation_complexElementInstanceType" />
-			<element name="NOT" type="profile:logical_operation_complexElementInstanceType" />
+			<element name="AND" type="profile:global_logical_operation" />
+			<element name="OR" type="profile:global_logical_operation" />
+			<element name="XOR" type="profile:global_logical_operation" />
+			<element name="NOT" type="profile:global_logical_operation" />
 		</choice>
 	</group>
-	<complexType name="logical_operation_complexElementInstanceType">
+	<complexType name="global_logical_operation">
 		<choice minOccurs="0" maxOccurs="unbounded">
-			<element name="group">
+			<element name="complexElementInstance">
 				<complexType>
 					<sequence>
-						<group ref="profile:logical_operationGroup" minOccurs="0" maxOccurs="unbounded" />
+						<group ref="profile:complexElement_logical_operationGroup" minOccurs="0" maxOccurs="unbounded" />
 					</sequence>
-					<attribute name="groupRef" type="string" use="required" />
-					<assert test="count(*)=count(*[ends-with(@ref,concat('_',./../@groupRef))])" />
+					<attribute name="complexElementRef" type="string" use="required" />
+					<assert test="count(*)=count(*[ends-with(@ref,concat('_',./../@complexElementRef))])" />
 				</complexType>
 			</element>
 			<element ref="profile:element" />
 			<group ref="profile:elementInstanceRefGroup" />
-			<group ref="profile:logical_operation_complexElementInstance" />
+			<group ref="profile:global_logical_operation" />
 		</choice>
 	</complexType>
 
-	<complexType name="implication_complexElementInstanceType">
+	<complexType name="global_implication">
 		<sequence>
 			<element name="if">
 				<complexType>
-					<group ref="profile:logical_operation_complexElementInstance" />
+					<group ref="profile:global_logical_operation" />
 				</complexType>
 			</element>
 			<element name="then">
 				<complexType>
-					<group ref="profile:logical_operation_complexElementInstance" />
+					<group ref="profile:global_logical_operation" />
 				</complexType>
 			</element>
 			<element name="else" minOccurs="0">
 				<complexType>
-					<group ref="profile:logical_operation_complexElementInstance" />
+					<group ref="profile:global_logical_operation" />
 				</complexType>
 			</element>
 		</sequence>
 	</complexType>
 
-	<!-- group -->
+	<!-- Keys and Unique elements / attributes -->
+	<group name="globalKeys">
+		<choice>
+			<element name="key" type="profile:keyType" />
+			<element name="keyRef" type="profile:keyRefType" />
+			<element name="unique" type="profile:uniqueType" />
+		</choice>
+	</group>
+
+	<complexType name="globalKeyType">
+		<attribute name="name" use="required" />
+		<attribute name="selector" use="required" />
+		<attribute name="field" use="required" />
+	</complexType>
+
+	<complexType name="globalKeyRefType">
+		<sequence>
+			<element name="field" type="token" />
+		</sequence>
+		<attribute name="name" use="required" />
+		<attribute name="refer" use="required" />
+	</complexType>
+
+	<complexType name="globalUniqueType">
+		<attribute name="name" use="required" />
+		<attribute name="selector" use="required" />
+		<attribute name="field" use="required" />
+	</complexType>
+
+	<!-- complex element instance -->
 	<element name="complexElementInstance" type="profile:complexElementInstanceType">
 		<unique name="local_elementID">
 			<selector xpath="profile:elements/*" />
@@ -350,7 +390,7 @@
 						<element ref="profile:elementInstance" />
 						<element name="complexElementInstanceRef">
 							<complexType>
-								<attribute name="groupRef" type="string" use="required" />
+								<attribute name="complexElementRef" type="string" use="required" />
 								<attribute name="XPath" type="profile:XPath" use="required" />
 							</complexType>
 						</element>
@@ -367,31 +407,32 @@
 					</choice>
 				</complexType>
 			</element>
-			<element name="dependenceRules" type="profile:dependenceRulesType" minOccurs="0">
+			<element name="dependenceRules" type="profile:complexElementInstanceDependenceRulesType"
+				minOccurs="0">
 				<keyref name="local_elementID_ref" refer="profile:local_elementID">
 					<selector xpath=".//*" />
 					<field xpath="@ref"></field>
 				</keyref>
 			</element>
 		</sequence>
-		<attribute name="groupID" type="string" use="required" />
+		<attribute name="complexElementID" type="string" use="required" />
 		<attribute name="XPath" type="string" use="required" />
 		<assert
-			test="count(profile:elements/*[not(local-name(.)='complexElementInstance') and not(local-name(.)='complexElementInstanceRef')])=count(profile:elements/*[not(local-name(.)='complexElementInstance') and not(local-name(.)='complexElementInstanceRef') and ends-with(@ID,concat('_',./../../@groupID))])" />
+			test="count(profile:elements/*[not(local-name(.)='complexElementInstance') and not(local-name(.)='complexElementInstanceRef')])=count(profile:elements/*[not(local-name(.)='complexElementInstance') and not(local-name(.)='complexElementInstanceRef') and ends-with(@ID,concat('_',./../../@complexElementID))])" />
 		<assert
 			test="count(profile:elements/profile:complexElementInstanceRef) = count (profile:elements/profile:complexElementInstanceRef[starts-with(@XPath,./../../@XPath)])" />
 		<assert
 			test="if(.//profile:map) then (count(.//profile:map/@coordinate='longitude')=1 and count(.//profile:map/@coordinate='latitude')=1) else(true())" />
-
 	</complexType>
 
-	<complexType name="dependenceRulesType">
+	<!-- complex element dependence Rules -->
+	<complexType name="complexElementInstanceDependenceRulesType">
 		<sequence>
 			<element name="logic" minOccurs="0">
 				<complexType>
 					<choice maxOccurs="unbounded">
-						<group ref="profile:logical_operation" />
-						<element name="implication" type="profile:implicationType" />
+						<group ref="profile:complexElement_logical_operation" />
+						<element name="implication" type="profile:complexElement_implicationType" />
 					</choice>
 				</complexType>
 			</element>
@@ -403,71 +444,44 @@
 		</sequence>
 	</complexType>
 
-	<!-- dependence Rules -->
-
-
-	<group name="logical_operation">
+	<group name="complexElement_logical_operation">
 		<choice>
-			<element name="AND" type="profile:logical_operationType" />
-			<element name="OR" type="profile:logical_operationType" />
-			<element name="XOR" type="profile:logical_operationType" />
-			<element name="NOT" type="profile:logical_operationType" />
+			<element name="AND" type="profile:complexElement_logical_operationType" />
+			<element name="OR" type="profile:complexElement_logical_operationType" />
+			<element name="XOR" type="profile:complexElement_logical_operationType" />
+			<element name="NOT" type="profile:complexElement_logical_operationType" />
 		</choice>
 	</group>
 
-	<complexType name="logical_operationType">
-		<group ref="profile:logical_operationGroup" minOccurs="0" maxOccurs="unbounded" />
+	<complexType name="complexElement_logical_operationType">
+		<group ref="profile:complexElement_logical_operationGroup" minOccurs="0" maxOccurs="unbounded" />
 	</complexType>
-	<group name="logical_operationGroup">
+
+	<group name="complexElement_logical_operationGroup">
 		<choice>
 			<group ref="profile:elementInstanceRefGroup" />
 
 			<element name="group-occurrence" type="profile:occurrenceType" minOccurs="0" />
 
-			<group ref="profile:logical_operation" minOccurs="0" maxOccurs="unbounded" />
-		</choice>
-
-	</group>
-
-	<group name="elementInstanceRefGroup">
-		<choice>
-			<element name="elementInstanceAnyTypeRef" type="profile:elementAnyTypeRefType" />
-			<element name="elementInstanceAnyURIRef" type="profile:elementAnyURIRefType" />
-			<element name="elementInstanceBooleanRef" type="profile:elementBooleanRefType" />
-			<element name="elementInstanceDateRef" type="profile:elementDateRefType" />
-			<element name="elementInstanceDateTimeRef" type="profile:elementDateTimeRefType" />
-			<element name="elementInstanceDecimalRef" type="profile:elementDecimalRefType" />
-			<element name="elementInstanceDoubleRef" type="profile:elementDoubleRefType" />
-			<element name="elementInstanceDurationRef" type="profile:elementDurationRefType" />
-			<element name="elementInstanceIDRef" type="profile:elementIDRefType" />
-			<element name="elementInstanceIntegerRef" type="profile:elementIntegerRefType" />
-			<element name="elementInstanceNameRef" type="profile:elementNameRefType" />
-			<element name="elementInstanceNCNameRef" type="profile:elementNCNameRefType" />
-			<element name="elementInstanceNonPositiveIntegerRef" type="profile:elementNonPositiveIntegerRefType" />
-			<element name="elementInstancePositiveIntegerRef" type="profile:elementPositiveIntegerRefType" />
-			<element name="elementInstanceQNameRef" type="profile:elementQNameRefType" />
-			<element name="elementInstanceStringRef" type="profile:elementStringRefType" />
-			<element name="elementInstanceTimeRef" type="profile:elementTimeRefType" />
-			<element name="elementInstanceUnionRef" type="profile:elementUnionRefType" />
+			<group ref="profile:complexElement_logical_operation" minOccurs="0" maxOccurs="unbounded" />
 		</choice>
 	</group>
 
-
-	<complexType name="implicationType">
+	<complexType name="complexElement_implicationType">
 		<sequence>
 			<element name="if">
 				<complexType>
-					<group ref="profile:logical_operation" />
+					<group ref="profile:complexElement_logical_operation" />
 				</complexType>
 			</element>
 			<element name="then">
 				<complexType>
-					<group ref="profile:logical_operation" />
+					<group ref="profile:complexElement_logical_operation" />
 				</complexType>
 			</element>
 			<element name="else" minOccurs="0">
 				<complexType>
-					<group ref="profile:logical_operation" />
+					<group ref="profile:complexElement_logical_operation" />
 				</complexType>
 			</element>
 		</sequence>
@@ -502,4 +516,27 @@
 		</sequence>
 		<attribute name="name" use="required" />
 	</complexType>
+	<!-- element instance references -->
+	<group name="elementInstanceRefGroup">
+		<choice>
+			<element name="elementInstanceAnyTypeRef" type="profile:elementAnyTypeRefType" />
+			<element name="elementInstanceAnyURIRef" type="profile:elementAnyURIRefType" />
+			<element name="elementInstanceBooleanRef" type="profile:elementBooleanRefType" />
+			<element name="elementInstanceDateRef" type="profile:elementDateRefType" />
+			<element name="elementInstanceDateTimeRef" type="profile:elementDateTimeRefType" />
+			<element name="elementInstanceDecimalRef" type="profile:elementDecimalRefType" />
+			<element name="elementInstanceDoubleRef" type="profile:elementDoubleRefType" />
+			<element name="elementInstanceDurationRef" type="profile:elementDurationRefType" />
+			<element name="elementInstanceIDRef" type="profile:elementIDRefType" />
+			<element name="elementInstanceIntegerRef" type="profile:elementIntegerRefType" />
+			<element name="elementInstanceNameRef" type="profile:elementNameRefType" />
+			<element name="elementInstanceNCNameRef" type="profile:elementNCNameRefType" />
+			<element name="elementInstanceNonPositiveIntegerRef" type="profile:elementNonPositiveIntegerRefType" />
+			<element name="elementInstancePositiveIntegerRef" type="profile:elementPositiveIntegerRefType" />
+			<element name="elementInstanceQNameRef" type="profile:elementQNameRefType" />
+			<element name="elementInstanceStringRef" type="profile:elementStringRefType" />
+			<element name="elementInstanceTimeRef" type="profile:elementTimeRefType" />
+			<element name="elementInstanceUnionRef" type="profile:elementUnionRefType" />
+		</choice>
+	</group>
 </schema>

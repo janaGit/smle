@@ -224,18 +224,18 @@ export class DynamicGUIService {
         }
     }
     private processElementGroupRef(cache: Cache, complexElementInstance: any, parentXPath: string) {
-        let groupID = complexElementInstance._groupRef;
+        let complexElementID = complexElementInstance._complexElementRef;
         for (let key in this._profile) {
             if (key == "complexElementInstance") {
                 let complexElementInstancesGlobal = this._profile[key];
                 if (Array.isArray(complexElementInstancesGlobal)) {
                     for (var _key in complexElementInstancesGlobal) {
-                        if (groupID == complexElementInstancesGlobal[_key]._groupID) {
+                        if (complexElementID == complexElementInstancesGlobal[_key]._complexElementID) {
                             this.processComplexElementInstance(cache, complexElementInstancesGlobal[_key], parentXPath, true);
                         }
                     }
                 } else {
-                    if (groupID == complexElementInstancesGlobal._groupID) {
+                    if (complexElementID == complexElementInstancesGlobal._complexElementID) {
                         this.processComplexElementInstance(cache, complexElementInstancesGlobal, parentXPath, true);
                     }
                 }
@@ -268,8 +268,8 @@ export class DynamicGUIService {
         let xpath: XPathElement[] = this.splitXPath(XPath);
         let configuration = new DynamicGUIConfiguration();
         configuration = this.setConfigurationValues(complexElementInstance, configuration);
-        this._elementConfig[complexElementInstance._groupID] = configuration;
-        cache.profileID = complexElementInstance._groupID;
+        this._elementConfig[complexElementInstance._complexElementID] = configuration;
+        cache.profileID = complexElementInstance._complexElementID;
         let _cache = this._XMLDocument.add(cache, xpath, configuration);
         for (var key in elements) {
             if (key.indexOf('elementInstance') == 0) {
