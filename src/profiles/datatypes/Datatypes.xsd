@@ -105,7 +105,7 @@
 			<element name="notExist" minOccurs="0" />
 		</sequence>
 		<assert
-			test="(profile:fixQuantity and not(profile:minOccurs) and not(profile:maxOccurs)) or (not(profile:fixQuantity) and(profile:minOccurs or profile:maxOccurs))" />
+			test="(profile:fixQuantity and not(profile:minOccurs) and not(profile:maxOccurs)) or not(profile:fixQuantity)" />
 		<assert
 			test="not(profile:minOccurs) or not(profile:maxOccurs) or (profile:minOccurs &lt; profile:maxOccurs)" />
 		<assert

@@ -1,7 +1,4 @@
-import * as gmlLib from '../model/gml';
-import * as gmdLib from '../model/iso/gmd';
 import * as smlLib from '../model/sml';
-import * as sweLib from '../model/swe';
 import { Http, Response } from '@angular/http';
 import {Injectable} from '@angular/core';
 import {Observable}     from 'rxjs/Observable';
@@ -15,7 +12,6 @@ import { AbstractProcess } from '../model/sml/AbstractProcess';
 import { Namespaces } from './xml/Namespaces';
 
 declare var X2JS: any;
-declare var jQuery: any;
 
 export class BidiMap {
     private elementToID: Map<any, Map<string, string>>;
@@ -276,24 +272,6 @@ export class DynamicGUIService {
     }
 
     public getModelAndConfiguration(): Observable<Object> {
-        let model = new smlLib.PhysicalSystem();
-        let encoder = new SensorMLDocumentEncoder();
-        this._model = encoder.createDocumentForProcess(model);
-        let cache = new Cache(this._model.documentElement);
-        let path = this.splitXPath("sml:identification/sml:IdentifierList");
-        let configuration = new Configuration;
-        this._insertElements = new InsertElements(this._model);
-        let list = this._insertElements.add(cache, path, configuration);
-        //alert(JSON.stringify(model));
-        path = this.splitXPath("sml:Identifier/sml:Term/sml:label");
-        //alert(JSON.stringify(path));
-        let identifierList = new smlLib.IdentifierList();
-        configuration.valueFix = "short name";
-
-        this._insertElements.add(list, path, configuration);
-        path = this.splitXPath("sml:Identifier/sml:Term/sml:label");
-        configuration.valueFix = "long name";
-        this._insertElements.add(list, path, configuration);
         return this.getProfile().map((json: any) => {
             this._logger.info('JSON profile:' + JSON.stringify(json));
             if (json.profile) {
@@ -650,7 +628,7 @@ class InsertElements {
             childName = xpath[0];
             let attribute = xpath[1].slice(0, -1);
             let attributeList: string[] = attribute.split(",");
-            for (var attribute in attributeList) {
+            for (let attribute in attributeList) {
                 let a = attribute.split("=");
                 if (a.length == 2) {
                     attributes[a[0].slice(1)] = a[1];
